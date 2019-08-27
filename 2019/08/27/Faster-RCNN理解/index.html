@@ -86,10 +86,13 @@
 <meta property="og:site_name" content="GodWriter">
 <meta property="og:description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-27T07:18:08.200Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN理解/08/27/Faster-RCNN理解/Anchor-Generation-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN理解/Faster-RCNN%E7%90%86%E8%A7%A3%5CAnchor-Generation-Layer.png">
+<meta property="og:updated_time" content="2019-08-27T07:31:38.977Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Faster-RCNN理解">
 <meta name="twitter:description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/27/Faster-RCNN理解/08/27/Faster-RCNN理解/Anchor-Generation-Layer.png">
 
 
 
@@ -312,10 +315,11 @@
 </blockquote>
 <ul>
 <li><p>Anchor的主要为了在输入的图像上产生多个可能存在物体的bounding box，所以Anchor肯定是要分布在整个图像上，才能包括所有的物体。那么，在Faster-RCNN中Anchor是如何产生的呢？Anchor的产生下图所示：</p>
-<p>![tupian](Anchor Generation Layer.png)</p>
+<img src="/2019/08/27/Faster-RCNN理解/08/27/Faster-RCNN理解/Anchor-Generation-Layer.png" title="Anchor Generation Layer">
+
 </li>
 </ul>
-<p>![](C:\Users\18917\Pictures\blog\Faster-RCNN\Anchor Generation Layer.png)</p>
+<p><img src="/2019/08/27/Faster-RCNN理解/Faster-RCNN%E7%90%86%E8%A7%A3%5CAnchor-Generation-Layer.png" alt></p>
 <ul>
 <li><p>初学者很容易犯的错误就是：Anchor其实是神经网络产生的，最后要通过训练才能得到Anchor及图中那么多bounding box。其实不然，Anchor就是通过机械化的操作产生覆盖整张图的bounding box，数量多且杂。<strong><font color="red">和Anchor有关的神经网络做的并不是产生bounding box，而是产生相对应的bounding box的回归系数，回归系数正好也是4个值</font></strong>。我们先来理解什么是所谓的“机械化”，再来理解“回归系数”。</p>
 </li>
