@@ -79,13 +79,34 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="GodWriter">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Faster-RCNN理解">
+<meta property="og:url" content="http://yoursite.com/2019/08/27/Faster-RCNN/index.html">
 <meta property="og:site_name" content="GodWriter">
+<meta property="og:description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Anchor-Generation-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Region-Proposall-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/regression-coefficients.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Proposal-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/foreground.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/classification-layer-loss.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/classification-layer-loss-formula.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/ROIs.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/crop-pooling.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Classification-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Classification-Layer2.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Inference.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Inference1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Inference2.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Inference3.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/final-result.png">
+<meta property="og:updated_time" content="2019-08-27T07:54:18.320Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GodWriter">
+<meta name="twitter:title" content="Faster-RCNN理解">
+<meta name="twitter:description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Anchor-Generation-Layer.png">
 
 
 
@@ -115,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/27/Faster-RCNN/">
 
 
 
 
 
-  <title>GodWriter</title>
+  <title>Faster-RCNN理解 | GodWriter</title>
   
 
 
@@ -140,8 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,9 +234,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -246,9 +266,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/27/Faster-RCNN/" itemprop="url">Faster-RCNN理解</a></h1>
+          <h1 class="post-title" itemprop="name headline">Faster-RCNN理解</h1>
         
 
         <div class="post-meta">
@@ -298,9 +316,7 @@
       
 
       
-        
-          
-            <h3 id="Faster-RCNN理解"><a href="#Faster-RCNN理解" class="headerlink" title="Faster-RCNN理解"></a>Faster-RCNN理解</h3><blockquote>
+        <h3 id="Faster-RCNN理解"><a href="#Faster-RCNN理解" class="headerlink" title="Faster-RCNN理解"></a>Faster-RCNN理解</h3><blockquote>
 <p>几个问题</p>
 </blockquote>
 <ul>
@@ -581,8 +597,6 @@
 <li><a href="https://blog.csdn.net/u011961856/article/details/77920970" target="_blank" rel="noopener">https://blog.csdn.net/u011961856/article/details/77920970</a></li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -599,12 +613,12 @@
       
 
       
+      
+      
 
       
 
       
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -614,10 +628,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -625,6 +640,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -645,8 +664,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -688,6 +716,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Faster-RCNN理解"><span class="nav-number">1.</span> <span class="nav-text">Faster-RCNN理解</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Region-Proposal-Layer一共包含三层：Proposal-Layer，-Anchor-Target-Layer以及Proposal-Target-Layer。下面，我们将一层层来理解。"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">Region Proposal Layer一共包含三层：Proposal Layer， Anchor Target Layer以及Proposal Target Layer。下面，我们将一层层来理解。</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -821,6 +865,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
