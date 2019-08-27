@@ -87,9 +87,12 @@
 <meta property="og:description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Anchor-Generation-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/formula1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/formula2.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Region-Proposall-Layer.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/regression-coefficients.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Proposal-Layer.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/formula.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/foreground.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/classification-layer-loss.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/classification-layer-loss-formula.png">
@@ -102,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Inference2.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/Inference3.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Faster-RCNN/final-result.png">
-<meta property="og:updated_time" content="2019-08-27T07:54:18.320Z">
+<meta property="og:updated_time" content="2019-08-27T08:20:07.945Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Faster-RCNN理解">
 <meta name="twitter:description" content="Faster-RCNN理解 几个问题   Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？   Anchor Generatio">
@@ -334,14 +337,14 @@
 <ul>
 <li><p>初学者很容易犯的错误就是：Anchor其实是神经网络产生的，最后要通过训练才能得到Anchor及图中那么多bounding box。其实不然，Anchor就是通过机械化的操作产生覆盖整张图的bounding box，数量多且杂。<strong><font color="red">和Anchor有关的神经网络做的并不是产生bounding box，而是产生相对应的bounding box的回归系数，回归系数正好也是4个值</font></strong>。我们先来理解什么是所谓的“机械化”，再来理解“回归系数”。</p>
 </li>
-<li><p>对“机械化”的理解可以从上图解释。Faster-RCNN设置了aspect ratio(0.5, 1, 2)，以及Anchor Scales(8, 16, 32)。大部分博客说到这里就结束了，他们会说3x3=9，最后一共产生9个anchors。那么到底是怎么计算的呢？如下面公式所示：<br>$$<br>\left[ \begin{matrix} 8 \ 16 \ 32 \end{matrix} \right] \left[ \begin{matrix} 1:2 &amp; 1:1 &amp; 2:1 \end{matrix} \right]  = \left[ \begin{matrix}4:8 &amp; 8:8 &amp; 16:8 \ 8:16 &amp; 16:16 &amp; 32:16 \ 16:32 &amp; 32:32 &amp; 64:32\end{matrix} \right]<br>$$</p>
+<li><p>对“机械化”的理解可以从上图解释。Faster-RCNN设置了aspect ratio(0.5, 1, 2)，以及Anchor Scales(8, 16, 32)。大部分博客说到这里就结束了，他们会说3x3=9，最后一共产生9个anchors。那么到底是怎么计算的呢？如下面公式所示：</p>
+<p><img src="/2019/08/27/Faster-RCNN/formula1.png" alt></p>
 </li>
 <li><p>上面的公式详细的说明了如何通过两类参数生成9个比例，那么这9种比例如何应用到实际的图片，并产生相应大小的Anchors呢？当我们要生成Anchors时，我们的原图在卷积和池化之后，已经缩小了16倍，故此时的feature map上一点对应到原图的应该为16*16的区域。那么，定义在此feature map上的anchors返回到原图比例时，需要放大16倍，故在原图中Anchors的实际大小如下所示。</p>
+<p><img src="/2019/08/27/Faster-RCNN/formula2.png" alt></p>
 </li>
-</ul>
-<p>$$<br>\left[ \begin{matrix}4:8 &amp; 8:8 &amp; 16:8 \ 8:16 &amp; 16:16 &amp; 32:16 \ 16:32 &amp; 32:32 &amp; 64:32\end{matrix} \right] * 16 = \left[ \begin{matrix}64:128 &amp; 128:128 &amp; 256:128 \ 128:256 &amp; 256:256 &amp; 512:256 \ 256:512 &amp; 512:512 &amp; 1024: 512\end{matrix} \right]<br>$$</p>
+<li><p>综上，我们知道了</p>
 <ul>
-<li>综上，我们知道了<ul>
 <li>Anchors不是神经网络产生的，而是人为设计的，通过指定<strong>aspect ratio</strong>和<strong>anchor scales</strong>两个参数来生成。</li>
 <li>Anchors的原始比例是定义在特征图上的，若是返回到原图的话，需要乘以相应的倍数</li>
 <li><font color="red">仍有一个问题没有解决，Anchors和回归系数之间的关系？我们继续往下看</font></li>
@@ -424,7 +427,7 @@
 <li><p>$l_u$的计算公式如下所示，计算的是RPN预测的“回归系数”和“真实回归系数”（使用离RPN bbox最近的ground truth得到）之间的差。</p>
 <p>$l_u = \sum_{i\in{x, y,w,h}}smooth_{L1}(u_i(predicted) - u_i(target))$</p>
 <p>这里的$u_i$展开来就是$(u_x, u_y, u_w, u_h)$，smooth L1函数如下所示：</p>
-<p>$$smooth_{L1}(x) = \left{\begin{aligned} \frac{\sigma^2x^2}{2}  &amp; &amp; ||x|| &lt; \frac{1}{\sigma^2} \ ||x|| - \frac{0.5}{\sigma^2} &amp; &amp; otherwise \end{aligned}\right.$$</p>
+<p><img src="/2019/08/27/Faster-RCNN/formula.png" alt></p>
 <p>这里的$\sigma$是任意选择的，为了避免for-if循环，将会使用一个掩码矩阵来计算损失</p>
 </li>
 <li><p>根据上述损失的定义，我们需要计算下面的量</p>
@@ -449,10 +452,9 @@
 </li>
 <li><p>对于每一个RPN Boxes，并不是只分：前景、背景，还有一个类别：不关心(don’t care)，即又不是前景又不是背景，这些盒子不包括在RPN损失的计算中。当然，<strong>前景框和背景框也有数量限制</strong>，比如说我各取128个。那么，将会从通过测试的前景框或背景框中，随即将多余出来的框标定为“don’t care”。</p>
 </li>
-<li><p>得到用于计算<strong>RPN Loss</strong>的候选框之后，就可以通过公式来计算出<strong>Target regression coefficients</strong>。</p>
+<li><p>得到用于计算<strong>RPN Loss</strong>的候选框之后，就可以通过公式来计算出<strong>Target regression coefficients</strong>。<font color="red">这里用于计算位置损失的是“回归系数”，其实在理解Faster-RCNN的过程中，这个损失函数一直在困扰我。到底应该是“回归系数”，还是通过上面的公式变换得到的bbox坐标  (左上角x，左上角y，宽，高) </font>但不管是哪一个，通过代码可以详细了解，而且只是值的选择不同，并不影响了解Faster-RCNN的整体流程。</p>
 </li>
 </ul>
-<p><font color="red">*<em>这里用于计算位置损失的是“回归系数”，其实在理解Faster-RCNN的过程中，这个损失函数一直在困扰我。到底应该是“回归系数”，还是通过上面的公式变换得到的bbox坐标  (左上角x，左上角y，宽，高)  *</em></font>但不管是哪一个，通过代码可以详细了解，而且只是值的选择不同，并不影响了解Faster-RCNN的整体流程。</p>
 </li>
 <li><p>通过对RPN Loss的理解，我们知道了Anchor Target Layer的流程，我们最后再总结一下</p>
 <ul>
