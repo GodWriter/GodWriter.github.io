@@ -138,7 +138,7 @@
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/Faster-RCNN/Inference2.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/Faster-RCNN/Inference3.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/Faster-RCNN/final-result.png">
-<meta property="og:updated_time" content="2019-08-27T10:21:47.578Z">
+<meta property="og:updated_time" content="2019-08-28T13:21:46.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Faster-RCNN理解">
 <meta name="twitter:description" content="1. 几个问题 Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？  2. Anchor Generation Layer Anc">
@@ -388,7 +388,7 @@
 <li>在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？</li>
 </ul>
 <h1 id="2-Anchor-Generation-Layer"><a href="#2-Anchor-Generation-Layer" class="headerlink" title="2. Anchor Generation Layer"></a>2. Anchor Generation Layer</h1><ul>
-<li>Anchor的主要为了在输入的图像上产生多个可能存在物体的bounding box，所以Anchor肯定是要分布在整个图像上，才能包括所有的物体。那么，在Faster-RCNN中Anchor是如何产生的呢？Anchor的产生下图所示：</li>
+<li>Anchor主要为了在输入的图像上产生多个可能存在物体的bounding box，所以Anchor肯定是要分布在整个图像上，才能包括所有的物体。那么，在Faster-RCNN中Anchor是如何产生的呢？Anchor的产生下图所示：</li>
 </ul>
 <p><img src="/2019/08/27/Faster-RCNN/Anchor-Generation-Layer.png" alt></p>
 <ul>
@@ -559,7 +559,7 @@
 <p><img src="/2019/08/27/Faster-RCNN/ROIs.png" alt></p>
 </li>
 </ul>
-<p><strong>讲到这里，很多童鞋都会有疑惑，怎么又要选择合适的框ROIs了？RPN哪里不是选择了256个合适的RPN Boxes了吗，还分了前景和背景，这里为何又要重复，多次一举？其实，初学者都会有这样的疑惑，导致他们对Faster-RCNN的理解止步于此，因为太混乱了，就假装自己看懂了，不多想，我也曾是其中的一员。就算想通过Faster-RCNN的代码来了解详细的流程，结果又被复杂琐碎的代码劝退。</strong><font color="red"><strong>如果有以上疑问，我想下面的解释会让你们茅塞顿开。要始终记住，Faster-RCNN虽然是End-2-End，但它是2-stage，不像SSD、YOLO等是1-stage。2-stage的意思就是，训练分两个阶段：首先训练RPN，达到检测目的；其次训练网络剩余部分，达到识别目的。那么，我们虽然在训练RPN的时候就完成了前景、背景框的筛选，如最后挑选出256个既包括前景又包括背景的RPN Boxes，但它们是用来训练RPN的，都是阶段1做的事情，也就说和阶段2：Classification Layer层的训练是没有关系的。当你的RPN训练的很好的时候，就能够得到比较准确的前景、背景分数及回归系数，这时候我们再开始训练Classificaiton Layer，也就是说开始阶段2了。阶段1和阶段2分开了，故阶段2也拿不到那256个RPN Boxes，所以阶段2需要重新经过筛选得到比较好的用于训练Classification Layer的ROIs样本框。</strong></font></p>
+<p><strong>讲到这里，很多童鞋都会有疑惑，怎么又要选择合适的框ROIs了？RPN那里不是选择了256个合适的RPN Boxes了吗，还分了前景和背景，这里为何又要重复采样，多此一举？其实，初学者都会有这样的疑惑，导致他们对Faster-RCNN的理解止步于此，因为太混乱了，就假装自己看懂了，不多想，我也曾是其中的一员。就算想通过Faster-RCNN的代码来了解详细的流程，结果又被复杂琐碎的代码劝退。</strong><font color="red"><strong>如果有以上疑问，我想下面的解释会让你们茅塞顿开。要始终记住，Faster-RCNN虽然是End-2-End，但它是2-stage，不像SSD、YOLO等是1-stage。2-stage的意思就是，训练分两个阶段：首先训练RPN，达到检测目的；其次训练网络剩余部分，达到识别目的。那么，我们虽然在训练RPN的时候就完成了前景、背景框的筛选，如最后挑选出256个既包括前景又包括背景的RPN Boxes，但它们是用来训练RPN的，都是阶段1做的事情，也就说和阶段2：Classification Layer层的训练是没有关系的。当你的RPN训练的很好的时候，就能够得到比较准确的前景、背景分数及回归系数，这时候我们再开始训练Classificaiton Layer，也就是说开始阶段2了。由于阶段1和阶段2分开了，阶段2也拿不到那256个RPN Boxes用于训练RPN的样本，所以阶段2需要重新采样，经过筛选得到比较好的用于训练Classification Layer的ROIs样本框。</strong></font></p>
 <ul>
 <li>最后我们再总结一下Proposal Target Layer做的事情<ul>
 <li>Proposal Target Layer的输入<ul>
@@ -576,13 +576,13 @@
 </li>
 </ul>
 <h1 id="6-Crop-Pooling"><a href="#6-Crop-Pooling" class="headerlink" title="6. Crop Pooling"></a>6. Crop Pooling</h1><ul>
-<li><p>Proposal target layer为我们提供了多个有效的，用于训练的ROIs来计算相关的类别标签和回归系数。下一步就是从头网络生成的特征图中抽取与这些ROIs相关的特征，并用于剩余网络的来产生每个ROI所代表的：物体类别的概率分布，回归系数。<strong>Crop Pooling layer</strong>的工作就是从卷积特征图中进行特征抽取。</p>
+<li><p>Proposal target layer为我们提供了多个有效的，用于训练的ROIs来计算相关的类别标签和回归系数。下一步就是从头网络生成的特征图中抽取与这些ROIs相关的特征，并用剩余网络的来得到每个ROI所代表的：物体类别的概率分布，回归系数。<strong>Crop Pooling layer</strong>的工作就是从卷积特征图中进行特征抽取。</p>
 </li>
 <li><p>在crop pooling后的关键想法是<strong>Spatial Transformation Networks</strong>来抽取特征。CNN提取特征时，通常需要考虑输入样本的局部性、平移不变性、缩小不变性及旋转不变性，即图像的裁剪、平移、缩放、旋转。而实现这些方法就是对图像进行空间坐标变换，如<strong>仿射变化</strong>。<strong>SNT</strong>以一种统一的结构，自适应实现这些变化。SNT不需要关键点的标定，能根据分类或者其他任务自适应地将数据进行空间变换和对齐。幸运的是，Pytorch提供了两个API来实现：torch.nn.functional.affine_grid，torch.nn.functional.grid_sample。</p>
 </li>
 <li><p>Crop Pooling地步骤如下</p>
 <ul>
-<li>ROIs地坐标是相对于原图尺寸地(800 x 600)。为了将这些坐标带入输出特征图的空间上，我们必须要将它们除以步长（一般为16）。</li>
+<li>ROIs的坐标表示是相对于原图尺寸地(800 x 600)，为了将这些坐标带入输出特征图的空间上，我们必须要将它们除以步长（一般为16）。</li>
 <li>为了使用上述的API，我们需要仿射变换矩阵。我们需要目标特征图上的x,y维度点的数量，这个由配置参数cfg.POOLING_SIZE提供。因此，在crop pooling中，非正方形地ROIs会被用来在特征图上裁剪区域，并转变成固定大小的正方形窗口。这种转换必须要做，因为Crop Pooling地输出将会被进一步传递到卷积和全连接层，而它们需要固定维度特征。</li>
 </ul>
 <p><img src="/2019/08/27/Faster-RCNN/crop-pooling.png" alt></p>
@@ -597,7 +597,7 @@
 </li>
 <li><p>最好回忆一下两组回归系数之间的差异：RPN网络产生的，classification network产生。</p>
 <ul>
-<li>第一组RPN的回归系数用来寻来你RPN网络来得到更好的前景盒子（更加紧密的围绕目标边界）。此时目标回归系数，即由anchor得到的RPN Boxes与其最匹配的Ground Trouth计算得到。</li>
+<li>第一组RPN的回归系数用来训练RPN网络来得到更好的前景盒子（更加紧密的围绕目标边界）。此时目标回归系数，即由anchor得到的RPN Boxes与其最匹配的Ground Trouth计算得到。</li>
 <li>第二组回归系数由Classification Layer生成。这些系数是特定于类别的，即每个对象类都会产生一组回归系数，最后选择正确类别的系数即可。目标回归系数将在Proposal Target Layer得到，也是通过Ground Truth匹配得到，但是需要制作成特定的形式。<strong>值得注意的是，由于仿射变化SNT使得classification network是在正方形的特征图上操作的，故可能会造成回归系数也会收到影响的误解。然而，由于回归系数对无剪切的仿射变化是不变的，因此Proposal target layer和Classification Layer之间的回归系数依然可以进行比较，作为有效的学习信号。</strong></li>
 </ul>
 </li>
