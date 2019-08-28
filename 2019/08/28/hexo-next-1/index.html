@@ -101,7 +101,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="hexo,next,">
 
 
 
@@ -112,13 +112,22 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="GodWriter">
-<meta property="og:url" content="https://godwriter.github.io/index.html">
+<meta name="description" content="1. 版本概览 Node.js版本：v10.16.3 Hexo版本：v3.9.0 Next版本：v5.1.4  2. 首页不显示全文 希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图   解决方法如下  进入themes/next目录  打开_config.yml文件  搜索“auto_excerpt”，找到如下部分 auto_excerpt:   enable">
+<meta name="keywords" content="hexo,next">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo下Next主题的优化1">
+<meta property="og:url" content="https://godwriter.github.io/2019/08/28/hexo-next-1/index.html">
 <meta property="og:site_name" content="GodWriter">
+<meta property="og:description" content="1. 版本概览 Node.js版本：v10.16.3 Hexo版本：v3.9.0 Next版本：v5.1.4  2. 首页不显示全文 希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图   解决方法如下  进入themes/next目录  打开_config.yml文件  搜索“auto_excerpt”，找到如下部分 auto_excerpt:   enable">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/notlong.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/touxiang.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/banquan.jpg">
+<meta property="og:updated_time" content="2019-08-28T15:56:28.029Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GodWriter">
+<meta name="twitter:title" content="Hexo下Next主题的优化1">
+<meta name="twitter:description" content="1. 版本概览 Node.js版本：v10.16.3 Hexo版本：v3.9.0 Next版本：v5.1.4  2. 首页不显示全文 希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图   解决方法如下  进入themes/next目录  打开_config.yml文件  搜索“auto_excerpt”，找到如下部分 auto_excerpt:   enable">
+<meta name="twitter:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/notlong.jpg">
 
 
 
@@ -148,13 +157,13 @@
 
 
 
-  <link rel="canonical" href="https://godwriter.github.io/">
+  <link rel="canonical" href="https://godwriter.github.io/2019/08/28/hexo-next-1/">
 
 
 
 
 
-  <title>GodWriter</title>
+  <title>Hexo下Next主题的优化1 | GodWriter</title>
   
 
 
@@ -173,8 +182,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -277,9 +285,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -309,9 +317,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/28/hexo-next-1/" itemprop="url">Hexo下Next主题的优化1</a></h1>
+          <h1 class="post-title" itemprop="name headline">Hexo下Next主题的优化1</h1>
         
 
         <div class="post-meta">
@@ -383,38 +389,83 @@
       
 
       
-        
-          
-          1. 版本概览
-Node.js版本：v10.16.3
-Hexo版本：v3.9.0
-Next版本：v5.1.4
-
-2. 首页不显示全文
-希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图
-
-
-解决方法如下
-
-进入themes/next目录
-
-打开_config.yml文件
-
-搜索“auto_excerpt”，找到如下部分
-auto_excerpt:
+        <h1 id="1-版本概览"><a href="#1-版本概览" class="headerlink" title="1. 版本概览"></a>1. 版本概览</h1><ul>
+<li>Node.js版本：v10.16.3</li>
+<li>Hexo版本：v3.9.0</li>
+<li>Next版本：v5.1.4</li>
+</ul>
+<h1 id="2-首页不显示全文"><a href="#2-首页不显示全文" class="headerlink" title="2. 首页不显示全文"></a>2. 首页不显示全文</h1><ul>
+<li><p>希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图</p>
+<p><img src="/2019/08/28/hexo-next-1/notlong.jpg" alt></p>
+</li>
+<li><p>解决方法如下</p>
+<ul>
+<li><p>进入themes/next目录</p>
+</li>
+<li><p>打开_config.yml文件</p>
+</li>
+<li><p>搜索“auto_excerpt”，找到如下部分</p>
+<pre><code class="yaml">auto_excerpt:
   enable: true
-  length: 250
+  length: 250</code></pre>
+</li>
+<li><p>把enable改为true，length设置你想显示的长度</p>
+</li>
+</ul>
+</li>
+<li><p>问题即可迎刃而解</p>
+</li>
+</ul>
+<h1 id="3-首页添加头像"><a href="#3-首页添加头像" class="headerlink" title="3. 首页添加头像"></a>3. 首页添加头像</h1><ul>
+<li><p>希望达到效果：首页能够有自己的头像显示，效果如下图</p>
+<p><img src="/2019/08/28/hexo-next-1/touxiang.jpg" alt></p>
+</li>
+<li><p>解决步骤如下</p>
+<ul>
+<li><p>进入themes/next目录</p>
+</li>
+<li><p>打开_config.yml文件</p>
+</li>
+<li><p>搜索”avatar”，修改成如下</p>
+<pre><code class="yaml">avatar: /images/avatar.gif</code></pre>
+</li>
+<li><p>将你的图像放到\themes\next\source\images文件夹下，命名为：avatar.gif，若已经有这个文件直接替换即可。</p>
+</li>
+</ul>
+</li>
+<li><p>问题即可迎刃而解</p>
+</li>
+</ul>
+<h1 id="4-开启版权声明"><a href="#4-开启版权声明" class="headerlink" title="4. 开启版权声明"></a>4. 开启版权声明</h1><ul>
+<li><p>希望达到效果：每篇文章末尾会有版权声明，效果如下图</p>
+<p><img src="/2019/08/28/hexo-next-1/banquan.jpg" alt></p>
+</li>
+<li><p>解决步骤如下</p>
+<ul>
+<li><p>进入themes/next目录</p>
+</li>
+<li><p>打开_config.yml文件</p>
+</li>
+<li><p>搜索“post_copyright”，修改成如下</p>
+<pre><code class="yaml">post_copyright:
+  enable: true
+  license: CC BY-NC-SA 3.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/3.0/</code></pre>
+</li>
+</ul>
+</li>
+<li><p>问题即可迎刃而解</p>
+</li>
+</ul>
+<h1 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h1><ul>
+<li><p><a href="https://www.jianshu.com/p/393d067dba8d" target="_blank" rel="noopener">https://www.jianshu.com/p/393d067dba8d</a></p>
+</li>
+<li><p><a href="https://jingyan.baidu.com/article/d5a880ebeb42f113f147cce5.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/d5a880ebeb42f113f147cce5.html</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/weixin_43971764/article/details/96478950" target="_blank" rel="noopener">https://blog.csdn.net/weixin_43971764/article/details/96478950</a></p>
+</li>
+</ul>
 
-把enable改为true，length设置你想显示的长
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/08/28/hexo-next-1/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
       
     </div>
     
@@ -426,171 +477,59 @@ auto_excerpt:
     
 
     
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    GodWriter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://godwriter.github.io/2019/08/28/hexo-next-1/" title="Hexo下Next主题的优化1">https://godwriter.github.io/2019/08/28/hexo-next-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/27/Faster-RCNN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="GodWriter">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="GodWriter">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/27/Faster-RCNN/" itemprop="url">Faster-RCNN理解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-27T15:09:14+08:00">
-                2019-08-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/目标检测/" itemprop="url" rel="index">
-                    <span itemprop="name">目标检测</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
           
-
+            <a href="/tags/next/" rel="tag"># next</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          
-          1. 几个问题
-Anchor和全卷积输出值之间的关系
-“回归系数”是什么，有什么用？
-在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？
-
-2. Anchor Generation Layer
-Anchor主要为了在输入的图像上产生多个可能存在物体的bounding box，所以Anchor肯定是要
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/08/27/Faster-RCNN/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/27/Faster-RCNN/" rel="next" title="Faster-RCNN理解">
+                <i class="fa fa-chevron-left"></i> Faster-RCNN理解
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -600,10 +539,11 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -611,6 +551,10 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
 
 
           
+
+  
+
+
 
         </div>
         
@@ -631,8 +575,17 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -694,6 +647,22 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-版本概览"><span class="nav-text">1. 版本概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-首页不显示全文"><span class="nav-text">2. 首页不显示全文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-首页添加头像"><span class="nav-text">3. 首页添加头像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-开启版权声明"><span class="nav-text">4. 开启版权声明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-参考资料"><span class="nav-text">5. 参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -834,6 +803,10 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
