@@ -164,7 +164,7 @@
 
 
 
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -293,6 +293,313 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/09/03/fast-rcnn-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GodWriter">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GodWriter">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/03/fast-rcnn-code/" itemprop="url">Faster RCNN 源码理解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-03T23:23:18+08:00">
+                2019-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/目标检测/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          1. Anchor Generation Layer对于生成anchors的源码理解主要来源于两个代码
+
+RBG大神的caffe源码：https://github.com/rbgirshick/py-faster-rcnn
+Github上复现的pytorch源码：https://github.com/chenyuntc/simple-faster-rcnn-pytorch
+
+由于两种方法生成anchors的技巧不同，故分开讨论，并主要以RBG大神的代码为主，讲解anchors的生成原理与生成技巧
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/09/03/fast-rcnn-code/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/30/roi-align/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GodWriter">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GodWriter">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/30/roi-align/" itemprop="url">ROI Align理解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-30T14:12:53+08:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/目标检测/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          1. 几个问题
+Mask R-CNN中为何要使用ROI Align取代Faster R-CNN中的ROI Pooling
+何为线性插值，何为双线性插值？插值的意义？
+ROI Align的具体步骤
+
+2. ROI Pooling
+在Faster RCNN中（不懂Faster RCNN的点击这里），通过Achor生成的RPN Boxes经过一系列筛选后，会得到一系列ROIs用于后面的识别等工作。但是用于识别的网络需要输入固定维度的图像特征，而ROIs的大小不一致，故抽取的图像特征也不一致。为此，在F
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/30/roi-align/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/28/hexo-next-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -406,7 +713,8 @@ auto_excerpt:
   enable: true
   length: 250
 
-把enable改为true，length设置你想显示的长
+
+把enable改为true，length设置你想显示的
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -461,7 +769,7 @@ auto_excerpt:
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/27/Faster-RCNN/">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/27/faster-rcnn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="GodWriter">
@@ -480,7 +788,7 @@ auto_excerpt:
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/27/Faster-RCNN/" itemprop="url">Faster-RCNN理解</a></h1>
+                <a class="post-title-link" href="/2019/08/27/faster-rcnn/" itemprop="url">Faster-RCNN理解</a></h1>
         
 
         <div class="post-meta">
@@ -564,7 +872,7 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/08/27/Faster-RCNN/#more" rel="contents">
+            <a class="btn" href="/2019/08/27/faster-rcnn/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -650,7 +958,7 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -672,7 +980,7 @@ Anchor主要为了在输入的图像上产生多个可能存在物体的bounding
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

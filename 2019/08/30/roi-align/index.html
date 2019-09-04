@@ -101,7 +101,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="CV,">
 
 
 
@@ -112,13 +112,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="GodWriter">
-<meta property="og:url" content="https://godwriter.github.io/archives/index.html">
+<meta name="description" content="1. 几个问题 Mask R-CNN中为何要使用ROI Align取代Faster R-CNN中的ROI Pooling 何为线性插值，何为双线性插值？插值的意义？ ROI Align的具体步骤  2. ROI Pooling 在Faster RCNN中（不懂Faster RCNN的点击这里），通过Achor生成的RPN Boxes经过一系列筛选后，会得到一系列ROIs用于后面的识别等工作。但是用">
+<meta name="keywords" content="CV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROI Align理解">
+<meta property="og:url" content="https://godwriter.github.io/2019/08/30/roi-align/index.html">
 <meta property="og:site_name" content="GodWriter">
+<meta property="og:description" content="1. 几个问题 Mask R-CNN中为何要使用ROI Align取代Faster R-CNN中的ROI Pooling 何为线性插值，何为双线性插值？插值的意义？ ROI Align的具体步骤  2. ROI Pooling 在Faster RCNN中（不懂Faster RCNN的点击这里），通过Achor生成的RPN Boxes经过一系列筛选后，会得到一系列ROIs用于后面的识别等工作。但是用">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://godwriter.github.io/2019/08/30/roi-align/ROI-pooling.png">
+<meta property="og:updated_time" content="2019-09-04T15:33:52.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GodWriter">
+<meta name="twitter:title" content="ROI Align理解">
+<meta name="twitter:description" content="1. 几个问题 Mask R-CNN中为何要使用ROI Align取代Faster R-CNN中的ROI Pooling 何为线性插值，何为双线性插值？插值的意义？ ROI Align的具体步骤  2. ROI Pooling 在Faster RCNN中（不懂Faster RCNN的点击这里），通过Achor生成的RPN Boxes经过一系列筛选后，会得到一系列ROIs用于后面的识别等工作。但是用">
+<meta name="twitter:image" content="https://godwriter.github.io/2019/08/30/roi-align/ROI-pooling.png">
 
 
 
@@ -148,13 +155,13 @@
 
 
 
-  <link rel="canonical" href="https://godwriter.github.io/archives/">
+  <link rel="canonical" href="https://godwriter.github.io/2019/08/30/roi-align/">
 
 
 
 
 
-  <title>归档 | GodWriter</title>
+  <title>ROI Align理解 | GodWriter</title>
   
 
 
@@ -173,7 +180,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     <a href="https://github.com/GodWriter" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
@@ -278,177 +285,218 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/30/roi-align/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GodWriter">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GodWriter">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">ROI Align理解</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-30T14:12:53+08:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 4 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/目标检测/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/03/fast-rcnn-code/" itemprop="url">
-              
-                <span itemprop="name">Faster RCNN 源码理解</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-03T23:23:18+08:00" content="2019-09-03">
-          09-03
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/30/roi-align/" itemprop="url">
-              
-                <span itemprop="name">ROI Align理解</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-30T14:12:53+08:00" content="2019-08-30">
-          08-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/28/hexo-next-1/" itemprop="url">
-              
-                <span itemprop="name">Hexo下Next主题的优化1</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-28T23:18:59+08:00" content="2019-08-28">
-          08-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="1-几个问题"><a href="#1-几个问题" class="headerlink" title="1. 几个问题"></a>1. 几个问题</h1><ul>
+<li>Mask R-CNN中为何要使用ROI Align取代Faster R-CNN中的ROI Pooling</li>
+<li>何为线性插值，何为双线性插值？插值的意义？</li>
+<li>ROI Align的具体步骤</li>
+</ul>
+<h1 id="2-ROI-Pooling"><a href="#2-ROI-Pooling" class="headerlink" title="2. ROI Pooling"></a>2. ROI Pooling</h1><ul>
+<li><p>在Faster RCNN中（不懂Faster RCNN的点击<a href="https://godwriter.github.io/2019/08/27/Faster-RCNN/#more">这里</a>），通过Achor生成的RPN Boxes经过一系列筛选后，会得到一系列ROIs用于后面的识别等工作。但是用于识别的网络需要输入固定维度的图像特征，而ROIs的大小不一致，故抽取的图像特征也不一致。为此，在Faster RCNN中，使用ROI Pooling来解决这个问题。</p>
+<p><img src="/2019/08/30/roi-align/ROI-pooling.png" alt></p>
+</li>
+<li><p>首先，我们理解一下ROI Pooling的基本思路，如上图所示</p>
+<ul>
+<li>假设我们有一个8*9的feature map，2个ROI，且要求输出的固定维度大小为2x2</li>
+<li>我们经过<strong>坐标的变化</strong>，得到在特征图上的投影坐标（左上角x，左上角y，宽度，高度）为(0, 3, 3, 4)，(4, 1, 4, 4)，如图中的红框</li>
+<li>既然需要得到2x2的固定特征维度，那么我们需要对红框内的特征图做Pooling，Pooling方式也如图中所示，以及最后的结果，都一目了然。</li>
+<li><strong>有的特征图在划分的时候不能整除，那就只能采取图中做法，类似于加了个zero-pooling</strong></li>
+</ul>
+</li>
+<li><p>其次，我们来说一下ROI Pooling存在的问题。我们在上面提到了”坐标变换“这四个字，我也特地加粗了，其实问题就出在这里。</p>
+<ul>
+<li>假设我们使用VGG16, feat_stride=32来提取图片特征。若原图大小为800x800，那么最后输出的特征图xxxxxxxxx……</li>
+</ul>
+</li>
+</ul>
+<p><strong>未完待续~~~</strong></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li><a href="https://blog.csdn.net/u011436429/article/details/80279536" target="_blank" rel="noopener">https://blog.csdn.net/u011436429/article/details/80279536</a></li>
+<li><a href="https://www.cnblogs.com/wangyong/p/8523814.html" target="_blank" rel="noopener">https://www.cnblogs.com/wangyong/p/8523814.html</a></li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/27/faster-rcnn/" itemprop="url">
-              
-                <span itemprop="name">Faster-RCNN理解</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-27T15:09:14+08:00" content="2019-08-27">
-          08-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    GodWriter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://godwriter.github.io/2019/08/30/roi-align/" title="ROI Align理解">https://godwriter.github.io/2019/08/30/roi-align/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CV/" rel="tag"># CV</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/28/hexo-next-1/" rel="next" title="Hexo下Next主题的优化1">
+                <i class="fa fa-chevron-left"></i> Hexo下Next主题的优化1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/03/fast-rcnn-code/" rel="prev" title="Faster RCNN 源码理解">
+                Faster RCNN 源码理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -456,6 +504,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -476,8 +528,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -539,6 +600,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-几个问题"><span class="nav-text">1. 几个问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-ROI-Pooling"><span class="nav-text">2. ROI Pooling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -679,6 +756,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

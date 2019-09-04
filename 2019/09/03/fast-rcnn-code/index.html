@@ -101,7 +101,7 @@
 
 
 
-  <meta name="keywords" content="hexo,next,">
+  <meta name="keywords" content="CV,Deep Learning,Pytorch,">
 
 
 
@@ -112,24 +112,18 @@
 
 
 
-<meta name="description" content="1. 版本概览 Node.js版本：v10.16.3 Hexo版本：v3.9.0 Next版本：v5.1.4  2. 首页不显示全文 希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图   解决方法如下  进入themes/next目录  打开_config.yml文件  搜索“auto_excerpt”，找到如下部分 auto_excerpt:   enable">
-<meta name="keywords" content="hexo,next">
+<meta name="description" content="1. Anchor Generation Layer对于生成anchors的源码理解主要来源于两个代码  RBG大神的caffe源码：https://github.com/rbgirshick/py-faster-rcnn Github上复现的pytorch源码：https://github.com/chenyuntc/simple-faster-rcnn-pytorch  由于两种方法生成anc">
+<meta name="keywords" content="CV,Deep Learning,Pytorch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo下Next主题的优化1">
-<meta property="og:url" content="https://godwriter.github.io/2019/08/28/hexo-next-1/index.html">
+<meta property="og:title" content="Faster RCNN 源码理解">
+<meta property="og:url" content="https://godwriter.github.io/2019/09/03/fast-rcnn-code/index.html">
 <meta property="og:site_name" content="GodWriter">
-<meta property="og:description" content="1. 版本概览 Node.js版本：v10.16.3 Hexo版本：v3.9.0 Next版本：v5.1.4  2. 首页不显示全文 希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图   解决方法如下  进入themes/next目录  打开_config.yml文件  搜索“auto_excerpt”，找到如下部分 auto_excerpt:   enable">
+<meta property="og:description" content="1. Anchor Generation Layer对于生成anchors的源码理解主要来源于两个代码  RBG大神的caffe源码：https://github.com/rbgirshick/py-faster-rcnn Github上复现的pytorch源码：https://github.com/chenyuntc/simple-faster-rcnn-pytorch  由于两种方法生成anc">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/notlong.jpg">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/touxiang.jpg">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/banquan.jpg">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/icon.jpg">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/iconwebsite.jpg">
-<meta property="og:updated_time" content="2019-08-28T16:29:53.904Z">
+<meta property="og:updated_time" content="2019-09-04T16:56:00.875Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo下Next主题的优化1">
-<meta name="twitter:description" content="1. 版本概览 Node.js版本：v10.16.3 Hexo版本：v3.9.0 Next版本：v5.1.4  2. 首页不显示全文 希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图   解决方法如下  进入themes/next目录  打开_config.yml文件  搜索“auto_excerpt”，找到如下部分 auto_excerpt:   enable">
-<meta name="twitter:image" content="https://godwriter.github.io/2019/08/28/hexo-next-1/notlong.jpg">
+<meta name="twitter:title" content="Faster RCNN 源码理解">
+<meta name="twitter:description" content="1. Anchor Generation Layer对于生成anchors的源码理解主要来源于两个代码  RBG大神的caffe源码：https://github.com/rbgirshick/py-faster-rcnn Github上复现的pytorch源码：https://github.com/chenyuntc/simple-faster-rcnn-pytorch  由于两种方法生成anc">
 
 
 
@@ -159,13 +153,13 @@
 
 
 
-  <link rel="canonical" href="https://godwriter.github.io/2019/08/28/hexo-next-1/">
+  <link rel="canonical" href="https://godwriter.github.io/2019/09/03/fast-rcnn-code/">
 
 
 
 
 
-  <title>Hexo下Next主题的优化1 | GodWriter</title>
+  <title>Faster RCNN 源码理解 | GodWriter</title>
   
 
 
@@ -303,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/08/28/hexo-next-1/">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/09/03/fast-rcnn-code/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="GodWriter">
@@ -320,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hexo下Next主题的优化1</h1>
+          <h1 class="post-title" itemprop="name headline">Faster RCNN 源码理解</h1>
         
 
         <div class="post-meta">
@@ -332,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-28T23:18:59+08:00">
-                2019-08-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-03T23:23:18+08:00">
+                2019-09-03
               </time>
             
 
@@ -355,8 +349,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">Hexo</span>
+                  <a href="/categories/目标检测/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
                   </a>
                 </span>
 
@@ -392,107 +386,176 @@
       
 
       
-        <h1 id="1-版本概览"><a href="#1-版本概览" class="headerlink" title="1. 版本概览"></a>1. 版本概览</h1><ul>
-<li>Node.js版本：v10.16.3</li>
-<li>Hexo版本：v3.9.0</li>
-<li>Next版本：v5.1.4</li>
-</ul>
-<h1 id="2-首页不显示全文"><a href="#2-首页不显示全文" class="headerlink" title="2. 首页不显示全文"></a>2. 首页不显示全文</h1><ul>
-<li><p>希望达到效果：首页显示文章列表，列表里的每一篇文章只显示预览，不显示全文。效果如下图</p>
-<p><img src="/2019/08/28/hexo-next-1/notlong.jpg" alt></p>
-</li>
-<li><p>解决方法如下</p>
+        <h1 id="1-Anchor-Generation-Layer"><a href="#1-Anchor-Generation-Layer" class="headerlink" title="1. Anchor Generation Layer"></a>1. Anchor Generation Layer</h1><p>对于生成anchors的源码理解主要来源于两个代码</p>
 <ul>
-<li><p>进入themes/next目录</p>
-</li>
-<li><p>打开_config.yml文件</p>
-</li>
-<li><p>搜索“auto_excerpt”，找到如下部分</p>
-<pre class=" language-lang-yaml"><code class="language-lang-yaml">auto_excerpt:
-  enable: true
-  length: 250
-</code></pre>
-</li>
-<li><p>把enable改为true，length设置你想显示的长度</p>
-</li>
+<li>RBG大神的caffe源码：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="noopener">https://github.com/rbgirshick/py-faster-rcnn</a></li>
+<li>Github上复现的pytorch源码：<a href="https://github.com/chenyuntc/simple-faster-rcnn-pytorch" target="_blank" rel="noopener">https://github.com/chenyuntc/simple-faster-rcnn-pytorch</a></li>
 </ul>
-</li>
-<li><p>问题即可迎刃而解</p>
-</li>
-</ul>
-<h1 id="3-首页添加头像"><a href="#3-首页添加头像" class="headerlink" title="3. 首页添加头像"></a>3. 首页添加头像</h1><ul>
-<li><p>希望达到效果：首页能够有自己的头像显示，效果如下图</p>
-<p><img src="/2019/08/28/hexo-next-1/touxiang.jpg" alt></p>
-</li>
-<li><p>解决步骤如下</p>
+<p>由于两种方法生成anchors的技巧不同，故分开讨论，并主要以RBG大神的代码为主，讲解anchors的生成原理与生成技巧。</p>
+<h2 id="1-1-Caffe源码"><a href="#1-1-Caffe源码" class="headerlink" title="1.1 Caffe源码"></a>1.1 Caffe源码</h2><ul>
+<li><p>首先，解释一下，重要的参数</p>
 <ul>
-<li><p>进入themes/next目录</p>
-</li>
-<li><p>打开_config.yml文件</p>
-</li>
-<li><p>搜索”avatar”，修改成如下</p>
-<pre class=" language-lang-yaml"><code class="language-lang-yaml">avatar: /images/avatar.gif
-</code></pre>
-</li>
-<li><p>将你的图像放到\themes\next\source\images文件夹下，命名为：avatar.gif，若已经有这个文件直接替换即可。</p>
-</li>
+<li>base_size=16，由于原图经过卷积池化后得到的特征图是原图的$\frac{1}{16}$，故用于采样anchor的特征图上的一个cell就相当于原图的$16 \times 16$区域。</li>
+<li>ratios=[0.5, 1, 2]，固定anchor面积下的长宽比，即$[1:2 \quad 1:1 \quad 2:1]$</li>
+<li>scales=[8, 16, 32]，即将anchors放大的倍数，具体在哪里用到会在后面详细解释</li>
 </ul>
 </li>
-<li><p>问题即可迎刃而解</p>
-</li>
-</ul>
-<h1 id="4-开启版权声明"><a href="#4-开启版权声明" class="headerlink" title="4. 开启版权声明"></a>4. 开启版权声明</h1><ul>
-<li><p>希望达到效果：每篇文章末尾会有版权声明，效果如下图</p>
-<p><img src="/2019/08/28/hexo-next-1/banquan.jpg" alt></p>
-</li>
-<li><p>解决步骤如下</p>
+<li><p>其次，我们根据RBG大神的源码走一遍anchors生成的流程</p>
 <ul>
-<li><p>进入themes/next目录</p>
-</li>
-<li><p>打开_config.yml文件</p>
-</li>
-<li><p>搜索“post_copyright”，修改成如下</p>
-<pre class=" language-lang-yaml"><code class="language-lang-yaml">post_copyright:
-  enable: true
-  license: CC BY-NC-SA 3.0
-  license_url: https://creativecommons.org/licenses/by-nc-sa/3.0/
+<li><pre class=" language-lang-python"><code class="language-lang-python">def generate_anchors(base_size=16, ratios=[0.5, 1, 2],
+                     scales=2**np.arange(3, 6)):
+    """
+    Generate anchor (reference) windows by enumerating aspect ratios X
+    scales wrt a reference (0, 0, 15, 15) window.
+    """
+
+    base_anchor = np.array([1, 1, base_size, base_size]) - 1
+    ratio_anchors = _ratio_enum(base_anchor, ratios)
+    anchors = np.vstack([_scale_enum(ratio_anchors[i, :], scales)
+                         for i in xrange(ratio_anchors.shape[0])])
+    return anchors
 </code></pre>
-</li>
-</ul>
-</li>
-<li><p>问题即可迎刃而解</p>
-</li>
-</ul>
-<h1 id="5-添加github标志"><a href="#5-添加github标志" class="headerlink" title="5. 添加github标志"></a>5. 添加github标志</h1><ul>
-<li><p>希望达到效果：自己博客的右上角有一个github的小标志，点击可以直达主页，效果如下图</p>
-<p><img src="/2019/08/28/hexo-next-1/icon.jpg" alt></p>
-</li>
-<li><p>实现步骤如下</p>
 <ul>
-<li><p>点击<a href="http://tholman.com/github-corners/" target="_blank" rel="noopener">这里</a>挑选自己喜欢的样式，并复制代码。 例如，我是复制的这一个：</p>
-<p><img src="/2019/08/28/hexo-next-1/iconwebsite.jpg" alt></p>
+<li><strong>generate_anchors()</strong>函数是一切的开端，首先定义了base_anchor，由于图像的坐标以左上角为原点且值为(0, 0)，故base_anchor的坐标(xmin, ymin, xmax, ymax)为(0, 0, 15, 15)。</li>
+<li>其次，调用<strong>_ratio_enum()</strong>函数如下</li>
+</ul>
 </li>
-<li><p>进入themes/next/layout/_layout.swig文件中，并搜索如下代码</p>
-<pre class=" language-lang-html"><code class="language-lang-html"><div class="headband"></div>
+<li><pre class=" language-lang-python"><code class="language-lang-python">def _ratio_enum(anchor, ratios):
+    """
+    Enumerate a set of anchors for each aspect ratio wrt an anchor.
+    """
+
+    w, h, x_ctr, y_ctr = _whctrs(anchor)
+    size = w * h
+    size_ratios = size / ratios
+    ws = np.round(np.sqrt(size_ratios))
+    hs = np.round(ws * ratios)
+    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
+    return anchors
 </code></pre>
+<ul>
+<li>为了计算w, h, x_ctr, y_ctr，又调用了<strong>_whctrs()</strong>函数，如下所示</li>
+</ul>
 </li>
-<li><p>将复制的代码放到该代码行下，并把href改为自己的github地址</p>
+<li><pre class=" language-lang-python"><code class="language-lang-python">def _whctrs(anchor):
+    """
+    Return width, height, x center, and y center for an anchor (window).
+    """
+
+    w = anchor[2] - anchor[0] + 1
+    h = anchor[3] - anchor[1] + 1
+    x_ctr = anchor[0] + 0.5 * (w - 1)
+    y_ctr = anchor[1] + 0.5 * (h - 1)
+    return w, h, x_ctr, y_ctr
+</code></pre>
+<ul>
+<li><strong>_whctrs()</strong>函数的功能就是传入参数为（左上角x，左上角y，右上角x，右上角y），将其转换为（宽， 高， 中心坐标x，中心坐标y）</li>
+</ul>
+</li>
+<li><p>让我们回到<strong>_ratio_enum()</strong>函数</p>
+<ul>
+<li>得到base_anchor的（宽， 高， 中心坐标x，中心坐标y），经过计算值为（16, 16, 7.5, 7.5）</li>
+<li>size = w x h = 16 x 16 = 256</li>
+<li>size_ratios = $\frac{256}{[0.5 \quad 1 \quad 2]}$ = $[512, 256, 128]$</li>
+<li>对size_ratios开根号，再四舍五入，得到 ws = [23, 16, 11]</li>
+<li>ws和ratios相乘就得到了 hs = [12, 16, 22]</li>
+<li><strong>ws和hs其实是相同面积下，anchor不同长宽比条件下，得到的长和宽。但由于四舍五入的缘故，ws x hs的面积值不一定相等</strong></li>
+<li>得到上面的变量值后，又调用了<strong>_mkanchors()</strong>函数返回计算后的anchors，函数如下</li>
+</ul>
+</li>
+<li><pre class=" language-lang-python"><code class="language-lang-python">def _mkanchors(ws, hs, x_ctr, y_ctr):
+    """
+    Given a vector of widths (ws) and heights (hs) around a center
+    (x_ctr, y_ctr), output a set of anchors (windows).
+    """
+
+    ws = ws[:, np.newaxis]
+    hs = hs[:, np.newaxis]
+    anchors = np.hstack((x_ctr - 0.5 * (ws - 1),
+                         y_ctr - 0.5 * (hs - 1),
+                         x_ctr + 0.5 * (ws - 1),
+                         y_ctr + 0.5 * (hs - 1)))
+    return anchors
+</code></pre>
+<ul>
+<li><p>根据上面的代码，会得到如下的计算公式</p>
+<script type="math/tex; mode=display">7.5 - \frac{1}{2}\left[\begin{matrix} 22 \\ 15 \\ 10 \end{matrix}\right] = \left[\begin{matrix} -3.5\\ 0\\ 2.5\end{matrix}\right]</script><script type="math/tex; mode=display">7.5 - \frac{1}{2}\left[\begin{matrix} 12\\ 16\\ 22\end{matrix}\right] = \left[\begin{matrix} 1.5\\ 0\\ -3\end{matrix}\right]</script><script type="math/tex; mode=display">7.5 + \frac{1}{2}\left[\begin{matrix} 22 \\ 15 \\ 10 \end{matrix}\right] = \left[\begin{matrix} 18.5\\ 15\\ 12.5\end{matrix}\right]</script><script type="math/tex; mode=display">7.5 + \frac{1}{2}\left[\begin{matrix} 12\\ 16\\ 22\end{matrix}\right] = \left[\begin{matrix} 13\\ 15\\ 18\end{matrix}\right]</script></li>
+<li><p>最后anchors的值为$\left[\begin{matrix} -3.5 &amp; 1.5 &amp; 18.5 &amp; 13.5\\ 0 &amp; 0 &amp; 15 &amp; 15\\ 2.5 &amp; -3 &amp; 12.5 &amp; 18\end{matrix}\right]$</p>
+</li>
+<li><p><strong>这里得到的是，面积都为256下，以（7.5， 7.5）为中心坐标的，不同长宽比例下的anchor坐标。根据坐标的计算公式，可以发现，都是以7.5为中心坐标减去一半的长或宽，那么得到的是新的（左上角x，左上角y，右上角x，右上角y）形式的坐标值。为什么坐标会是负数，因为左上角坐标超出了图片范围，故为负数。</strong></p>
 </li>
 </ul>
 </li>
-<li><p>问题即可迎刃而解</p>
+<li><p>得到以上anchors后，我们直接返回到<strong>generate_anchors()</strong>函数</p>
+<ul>
+<li>通过一系列函数的调用，我们得到了ratio_anchors的值，即$\left[\begin{matrix} -3.5 &amp; 1.5 &amp; 18.5 &amp; 13.5\\ 0 &amp; 0 &amp; 15 &amp; 15\\ 2.5 &amp; -3 &amp; 12.5 &amp; 18\end{matrix}\right]$</li>
+<li>最后一步，就是调用<strong>_scale_enum()</strong>函数，得到不同scale下，不同长宽比例的anchors。目前的scale为[8, 16, 32]，对于每一个scale都要调用<strong>_scale_enum()</strong>函数；传入不同长宽比、以(7.5, 7.5)为中心坐标的anchors（<strong>即ratio_anchors的每一行</strong>），每次返回3组变换尺度后的anchors，故最后会有9组anchors。<strong>_scale_enum()</strong>函数如下</li>
+</ul>
+</li>
+<li><pre class=" language-lang-python"><code class="language-lang-python">def _scale_enum(anchor, scales):
+    """
+    Enumerate a set of anchors for each scale wrt an anchor.
+    """
+
+    w, h, x_ctr, y_ctr = _whctrs(anchor)
+    ws = w * scales
+    hs = h * scales
+    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
+    return anchors
+</code></pre>
+<ul>
+<li>我们以$[-3.5 \quad 1.5 \quad 18.5 \quad 13.5]$为例</li>
+<li>调用<strong>_whctrs()</strong>函数，得到中心坐标表示，w, h, x_ctr, y_ctr = $[23 \quad 12 \quad 7.5\quad 7.5]$</li>
+<li><script type="math/tex">ws = 23 \times \left[\begin{matrix} 8\\ 16\\ 32\end{matrix}\right] = \left[\begin{matrix} 184\\ 368\\ 736\end{matrix}\right]</script>，其实是宽为23的情况下，放大宽的值</li>
+<li><script type="math/tex">hs = 12 \times \left[\begin{matrix} 8\\ 16\\ 32\end{matrix}\right] = \left[\begin{matrix} 96\\ 192\\ 384\end{matrix}\right]</script>，其实是长为12的情况下，放大长的值</li>
+<li>由于中心坐标都是(7.5, 7.5)不变，但宽和高的值变了，所以新得到的anchors坐标需要再次调用<strong>_mkanchors()</strong>对坐标进行调整。在新的长和宽下，仍然以(7.5, 7.5)为中心坐标。</li>
+<li>最后计算得到的anchors坐标为$\left[\begin{matrix} -83 &amp; -39 &amp; 100 &amp; 56\\ -175 &amp; -87 &amp; 192 &amp; 104\\ -359 &amp; -183 &amp; 376 &amp; 200\end{matrix}\right]$</li>
+</ul>
 </li>
 </ul>
-<h1 id="6-参考资料"><a href="#6-参考资料" class="headerlink" title="6. 参考资料"></a>6. 参考资料</h1><ul>
-<li><p><a href="https://www.jianshu.com/p/393d067dba8d" target="_blank" rel="noopener">https://www.jianshu.com/p/393d067dba8d</a></p>
 </li>
-<li><p><a href="https://jingyan.baidu.com/article/d5a880ebeb42f113f147cce5.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/d5a880ebeb42f113f147cce5.html</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/weixin_43971764/article/details/96478950" target="_blank" rel="noopener">https://blog.csdn.net/weixin_43971764/article/details/96478950</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/fly_wt/article/details/86674138" target="_blank" rel="noopener">https://blog.csdn.net/fly_wt/article/details/86674138</a></p>
+<li><p>至此，RBG大神生成Anchors的方法就介绍完毕</p>
 </li>
 </ul>
+<h2 id="1-2-Pytorch源码"><a href="#1-2-Pytorch源码" class="headerlink" title="1.2 Pytorch源码"></a>1.2 Pytorch源码</h2><ul>
+<li><p>Pytorch版本就不详细解释了，直接上代码，简单易懂</p>
+<pre class=" language-lang-python"><code class="language-lang-python">def generate_anchor_base(base_size=16, ratios=[0.5, 1, 2],
+                         anchor_scales=[8, 16, 32]):
+    """
+    Returns:
+        ~numpy.ndarray:
+        An array of shape :math:`(R, 4)`.
+        Each element is a set of coordinates of a bounding box.
+        The second axis corresponds to
+        :math:`(y_{min}, x_{min}, y_{max}, x_{max})` of a bounding box.
+    """
+    py = base_size / 2.
+    px = base_size / 2.
+
+    anchor_base = np.zeros((len(ratios) * len(anchor_scales), 4),
+                           dtype=np.float32)
+    for i in six.moves.range(len(ratios)):
+        for j in six.moves.range(len(anchor_scales)):
+            h = base_size * anchor_scales[j] * np.sqrt(ratios[i])
+            w = base_size * anchor_scales[j] * np.sqrt(1. / ratios[i])
+
+            index = i * len(anchor_scales) + j
+            anchor_base[index, 0] = py - h / 2.
+            anchor_base[index, 1] = px - w / 2.
+            anchor_base[index, 2] = py + h / 2.
+            anchor_base[index, 3] = px + w / 2.
+    return anchor_base
+</code></pre>
+<ul>
+<li>参数和caffee一致，不同点在于，计算anchor_base的方式</li>
+<li>这里的anchor_base没有-1</li>
+<li>调用了两个循环，即遍历9次，每次得到一个anchors的坐标</li>
+<li>计算的公式很奇怪，为何对ratios开根号，应该是有奇怪的转换公式的</li>
+<li>最后，是直接求anchor_base的每一个坐标，以中心坐标为基准，计算(ymin, xmin, ymax, xmax)</li>
+</ul>
+</li>
+</ul>
+<p><strong>未完待续~~~</strong></p>
 
       
     </div>
@@ -513,7 +576,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://godwriter.github.io/2019/08/28/hexo-next-1/" title="Hexo下Next主题的优化1">https://godwriter.github.io/2019/08/28/hexo-next-1/</a>
+    <a href="https://godwriter.github.io/2019/09/03/fast-rcnn-code/" title="Faster RCNN 源码理解">https://godwriter.github.io/2019/09/03/fast-rcnn-code/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -528,9 +591,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
+            <a href="/tags/CV/" rel="tag"># CV</a>
           
-            <a href="/tags/next/" rel="tag"># next</a>
+            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          
+            <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
           
         </div>
       
@@ -543,8 +608,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/27/faster-rcnn/" rel="next" title="Faster-RCNN理解">
-                <i class="fa fa-chevron-left"></i> Faster-RCNN理解
+              <a href="/2019/08/30/roi-align/" rel="next" title="ROI Align理解">
+                <i class="fa fa-chevron-left"></i> ROI Align理解
               </a>
             
           </div>
@@ -552,10 +617,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/30/roi-align/" rel="prev" title="ROI Align理解">
-                ROI Align理解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -689,7 +750,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-版本概览"><span class="nav-text">1. 版本概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-首页不显示全文"><span class="nav-text">2. 首页不显示全文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-首页添加头像"><span class="nav-text">3. 首页添加头像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-开启版权声明"><span class="nav-text">4. 开启版权声明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-添加github标志"><span class="nav-text">5. 添加github标志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-参考资料"><span class="nav-text">6. 参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Anchor-Generation-Layer"><span class="nav-text">1. Anchor Generation Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Caffe源码"><span class="nav-text">1.1 Caffe源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Pytorch源码"><span class="nav-text">1.2 Pytorch源码</span></a></li></ol></li></ol></div>
             
 
           </div>
