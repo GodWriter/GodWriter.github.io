@@ -83,33 +83,6 @@
     </entry>
     
     
-    
-    <entry>
-      <title>Faster-RCNN理解</title>
-      <link href="/2019/08/27/faster-rcnn/"/>
-      <url>/2019/08/27/faster-rcnn/</url>
-      
-        <content type="html"><![CDATA[<h1 id="1-几个问题"><a href="#1-几个问题" class="headerlink" title="1. 几个问题"></a>1. 几个问题</h1><ul><li>Anchor和全卷积输出值之间的关系</li><li>“回归系数”是什么，有什么用？</li><li>在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？</li></ul><h1 id="2-Anchor-Generation-Layer"><a href="#2-Anchor-Generation-Layer" class="headerlink" title="2. Anchor Generation Layer"></a>2. Anchor Generation Layer</h1><ul><li>Anchor主要为了在输入的图像上产生多个可能存在物体的bounding box，所以Anchor肯定是要分布在整个图像上，才能包括所有的物体。那么，在Faster-RCNN中Anchor是如何产生的呢？Anchor的产生下图所示：</li></ul><p><img src="/2019/08/27/faster-rcnn/Anchor-Generation-Layer.png" alt></p><ul><li><p>初学者很容易犯的错误就是：Anchor其实是神经网络产生的，最后要通过训练才能得到Anchor及图中那么多bounding box。其实不然，Anchor就是通过机械化的操作产生覆盖整张图的bounding box，数量多且杂。<strong><font color="red">和Anchor有关的神经网络做的并不是产生bounding box，而是产生相对应的bounding box的回归系数，回归系数正好也是4个值</font></strong>。我们先来理解什么是所谓的“机械化”，再来理解“回归系数”。</p></li><li><p>对“机械化”的理解可以从上图解释。Faster-RCNN设置了aspect ratio(0.5, 1, 2)，以及Anchor Scales(8, 16, 32)。大部分博客说到这里就结束了，他们会说3x3=9，最后一共产生9个anchors。那么到底是怎么计算的呢？详细可以看我通过源码阅读得到的计算过程，传送门在<a href="https://godwriter.github.io/2019/09/03/fast-rcnn-code/#more">这里</a>。如下面公式所示：</p></li><li><p>综上，我们知道了</p><ul><li>Anchors不是神经网络产生的，而是人为设计的，通过指定<strong>aspect ratio</strong>和<strong>anchor scales</strong>两个参数来生成。</li><li>Anchors的原始比例是定义在特征图上的，若是返回到原图的话，需要乘以相应的倍数</li><li><font color="red">仍有一个问题没有解决，Anchors和回归系数之间的关系？我们继续往下看</font></li></ul></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 目标检测 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> CV </tag>
-            
-            <tag> Deep Learning </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
   
   
 </search>
