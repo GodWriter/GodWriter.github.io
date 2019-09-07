@@ -121,8 +121,6 @@
 <meta property="og:description" content="1. 几个问题 Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？  2. Anchor Generation Layer Anc">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/Anchor-Generation-Layer.png">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/formula1.png">
-<meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/formula2.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/Region-Proposall-Layer.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/regression-coefficients.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/Proposal-Layer.png">
@@ -139,7 +137,7 @@
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/Inference2.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/Inference3.png">
 <meta property="og:image" content="https://godwriter.github.io/2019/08/27/faster-rcnn/final-result.png">
-<meta property="og:updated_time" content="2019-08-28T15:58:02.367Z">
+<meta property="og:updated_time" content="2019-09-07T14:20:53.074Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Faster-RCNN理解">
 <meta name="twitter:description" content="1. 几个问题 Anchor和全卷积输出值之间的关系 “回归系数”是什么，有什么用？ 在选择RPN Boxes时，既要考虑RPN Boxes与Ground Truth的IOU来筛选，又要考虑每个RPN boxes为物体前景的概率。那么在筛选RPN Boxes的时候，哪个先考虑，哪个后考虑，还是说同时考虑？如果说是同时考虑，又怎么考虑？  2. Anchor Generation Layer Anc">
@@ -418,11 +416,7 @@
 <ul>
 <li><p>初学者很容易犯的错误就是：Anchor其实是神经网络产生的，最后要通过训练才能得到Anchor及图中那么多bounding box。其实不然，Anchor就是通过机械化的操作产生覆盖整张图的bounding box，数量多且杂。<strong><font color="red">和Anchor有关的神经网络做的并不是产生bounding box，而是产生相对应的bounding box的回归系数，回归系数正好也是4个值</font></strong>。我们先来理解什么是所谓的“机械化”，再来理解“回归系数”。</p>
 </li>
-<li><p>对“机械化”的理解可以从上图解释。Faster-RCNN设置了aspect ratio(0.5, 1, 2)，以及Anchor Scales(8, 16, 32)。大部分博客说到这里就结束了，他们会说3x3=9，最后一共产生9个anchors。那么到底是怎么计算的呢？如下面公式所示：</p>
-<p><img src="/2019/08/27/faster-rcnn/formula1.png" alt></p>
-</li>
-<li><p>上面的公式详细的说明了如何通过两类参数生成9个比例，那么这9种比例如何应用到实际的图片，并产生相应大小的Anchors呢？当我们要生成Anchors时，我们的原图在卷积和池化之后，已经缩小了16倍，故此时的feature map上一点对应到原图的应该为16*16的区域。那么，定义在此feature map上的anchors返回到原图比例时，需要放大16倍，故在原图中Anchors的实际大小如下所示。</p>
-<p><img src="/2019/08/27/faster-rcnn/formula2.png" alt></p>
+<li><p>对“机械化”的理解可以从上图解释。Faster-RCNN设置了aspect ratio(0.5, 1, 2)，以及Anchor Scales(8, 16, 32)。大部分博客说到这里就结束了，他们会说3x3=9，最后一共产生9个anchors。那么到底是怎么计算的呢？详细可以看我通过源码阅读得到的计算过程，传送门在<a href="https://godwriter.github.io/2019/09/03/fast-rcnn-code/#more">这里</a>。如下面公式所示：</p>
 </li>
 <li><p>综上，我们知道了</p>
 <ul>
