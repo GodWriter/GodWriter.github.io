@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>小论文单词整理</title>
+      <link href="/2019/09/25/pape-word/"/>
+      <url>/2019/09/25/pape-word/</url>
+      
+        <content type="html"><![CDATA[<h1 id="1-常用单词的N种说法"><a href="#1-常用单词的N种说法" class="headerlink" title="1. 常用单词的N种说法"></a>1. 常用单词的N种说法</h1><h2 id="1-1-Besides"><a href="#1-1-Besides" class="headerlink" title="1.1 Besides"></a>1.1 Besides</h2><ul><li>Moreover</li><li>In addition</li></ul><h2 id="1-2-Get"><a href="#1-2-Get" class="headerlink" title="1.2 Get"></a>1.2 Get</h2><ul><li>obtain</li></ul><h2 id="1-3-Show"><a href="#1-3-Show" class="headerlink" title="1.3 Show"></a>1.3 Show</h2><ul><li>exhibit</li></ul><h2 id="1-4-Improve"><a href="#1-4-Improve" class="headerlink" title="1.4 Improve"></a>1.4 Improve</h2><ul><li>be boosted to</li></ul><h1 id="2-专有名词"><a href="#2-专有名词" class="headerlink" title="2. 专有名词"></a>2. 专有名词</h1><h2 id="2-1-Style-Transfer"><a href="#2-1-Style-Transfer" class="headerlink" title="2.1 Style Transfer"></a>2.1 Style Transfer</h2><ul><li>stylised image    转换后的风格图</li></ul><h2 id="2-2-Domain-Shift"><a href="#2-2-Domain-Shift" class="headerlink" title="2.2 Domain Shift"></a>2.2 Domain Shift</h2><ul><li>source domain    源域</li><li>target domain     目标域</li><li>intermediate domain    中间域</li></ul><h1 id="3-常用短语"><a href="#3-常用短语" class="headerlink" title="3. 常用短语"></a>3. 常用短语</h1><ul><li>draw increasing attention</li><li>most existing works</li><li>the benefit of</li><li></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> paper </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Faster-RCNN</title>
       <link href="/2019/09/07/faster-rcnn/"/>
       <url>/2019/09/07/faster-rcnn/</url>
