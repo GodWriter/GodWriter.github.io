@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="paper,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Unsupervised Image-to-Image Translation Networks 针对什么问题？  图像翻译旨在将图像从一个领域映射到另一个领域。在监督的设定下，数据集是成对的，领域之间的映射是可行的。但在非监督的情况下，即数据集不是成对的，而是分成两个彼此独立的领域，图像翻译的任务将会变得艰难。而现实生活中，成对的数据是很难获得的，故无监督的图像翻译更实在。  提出什么方法">
+<meta name="keywords" content="paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文泛读1：基于Disentangle的Image-to-Image Translation">
+<meta property="og:url" content="https://godwriter.github.io/2019/12/11/extensive-reading1/index.html">
+<meta property="og:site_name" content="GodWriter">
+<meta property="og:description" content="1. Unsupervised Image-to-Image Translation Networks 针对什么问题？  图像翻译旨在将图像从一个领域映射到另一个领域。在监督的设定下，数据集是成对的，领域之间的映射是可行的。但在非监督的情况下，即数据集不是成对的，而是分成两个彼此独立的领域，图像翻译的任务将会变得艰难。而现实生活中，成对的数据是很难获得的，故无监督的图像翻译更实在。  提出什么方法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/1-model.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/1-exp1.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/1-exp2.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/2-explain.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/2-model.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/2-autoencoder.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/2-exp1.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/2-exp2.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/2-exp4.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-method.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-model.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-multiI2I.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-loss.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-exp1.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-exp2.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/3-exp3.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/4-concept.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/4-model.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/4-exp.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/5-concept.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/5-model.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/5-exp.jpg">
+<meta property="og:updated_time" content="2020-02-15T10:07:03.655Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文泛读1：基于Disentangle的Image-to-Image Translation">
+<meta name="twitter:description" content="1. Unsupervised Image-to-Image Translation Networks 针对什么问题？  图像翻译旨在将图像从一个领域映射到另一个领域。在监督的设定下，数据集是成对的，领域之间的映射是可行的。但在非监督的情况下，即数据集不是成对的，而是分成两个彼此独立的领域，图像翻译的任务将会变得艰难。而现实生活中，成对的数据是很难获得的，故无监督的图像翻译更实在。  提出什么方法">
+<meta name="twitter:image" content="https://godwriter.github.io/2019/12/11/extensive-reading1/1-model.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://godwriter.github.io/2019/12/11/extensive-reading1/">
+
+
+
+
+
+  <title>论文泛读1：基于Disentangle的Image-to-Image Translation | GodWriter</title>
+  
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/GodWriter" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GodWriter</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/12/11/extensive-reading1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GodWriter">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GodWriter">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文泛读1：基于Disentangle的Image-to-Image Translation</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T13:16:03+08:00">
+                2019-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-Unsupervised-Image-to-Image-Translation-Networks"><a href="#1-Unsupervised-Image-to-Image-Translation-Networks" class="headerlink" title="1. Unsupervised Image-to-Image Translation Networks"></a>1. Unsupervised Image-to-Image Translation Networks</h1><blockquote>
+<p>针对什么问题？</p>
+</blockquote>
+<p>图像翻译旨在将图像从一个领域映射到另一个领域。在监督的设定下，数据集是成对的，领域之间的映射是可行的。但在非监督的情况下，即数据集不是成对的，而是分成两个彼此独立的领域，图像翻译的任务将会变得艰难。而现实生活中，成对的数据是很难获得的，故无监督的图像翻译更实在。</p>
+<blockquote>
+<p>提出什么方法？</p>
+</blockquote>
+<p>本文指出<strong>图像翻译的主要挑战是学习两个不同领域之间的联合分布</strong>。在无监督条件下，两个数据集合分别包括在不同领域中来自两个边缘分布的图像，而图像翻译的目的正是从这两个边缘分布得到联合分布。而耦合理论指出：<strong>一般情况下，存在无穷多的联合分布可以到达给定的边缘分布</strong>。因此，从边缘分布推断联合分布是一个不适合的方法。为了解决这个问题，本文对联合分布提出了额外的假设。</p>
+<ul>
+<li>本文提出一个共享隐藏空间的假设，即不同领域中的一对相关图像可以被映射到共享隐藏空间中的相同隐藏表达。</li>
+<li>基于上述假设，本文提出了结合了GAN和VAE的UNIT框架</li>
+</ul>
+<blockquote>
+<p>效果怎么样？</p>
+</blockquote>
+<p>本文将提出的框架应用于多种无监督的图像翻译问题并取得了高质量的翻译结果，这也从侧面反映了共享隐藏空间暗含了Cycle-Consistency Constraint（循环一致损失）。</p>
+<h2 id="1-1-Model"><a href="#1-1-Model" class="headerlink" title="1.1 Model"></a>1.1 Model</h2><p>本文提出的UNIT框架如下图所示：</p>
+<p><img src="/2019/12/11/extensive-reading1/1-model.jpg" alt></p>
+<ul>
+<li>其中，(a)图示了隐藏空间的含义，即Domain$X_1, X_2$中的图像$x_1, x_2$都被映射到了相同的隐藏空间$z$中</li>
+<li>(b)图示了整个框架的结构<ul>
+<li>Domain$X_1, X_2$中的图像$x_1, x_2$分别通过$E_1, E_2$映射到隐藏空间$z$中，再分别通过$G_1, G_2$还原成自我重构图像$\tilde{x}_1^{1 \rightarrow 1}, \tilde{x}_2^{2 \rightarrow 2}$或者领域翻译后的图像$\tilde{x}_1^{1 \rightarrow 2}, \tilde{x}_2^{2 \rightarrow 1}$。<ul>
+<li>$E_1, E_2$共享了最后几层网络，$G_1, G_2$共享了前面几层网络</li>
+<li>$\left\{ E_1, G_1 \right\}$, $\left\{ E_2, G_2 \right\}$对各自的领域$X_1, X_2$都构成了$VAE$的结构</li>
+</ul>
+</li>
+<li>判别器$D_1, D_2$负责验证翻译后的图像是否真实</li>
+</ul>
+</li>
+<li>本文指出，权重共享的约束并不能保证两个领域中相关的图像能够得到相同的隐藏空间编码。因为在无监督条件下，这两个领域中没有对应的图像能够训练网络输出相同的隐藏编码。即使隐藏编码是相同的，它们在不同的领域将会具有不同的语义意义。但话又说回来，通过对抗损失的训练，两个领域中对应的图像可以被映射到相同的隐藏空间，并可以被反射回不同的领域。</li>
+</ul>
+<h2 id="1-2-Optimization"><a href="#1-2-Optimization" class="headerlink" title="1.2 Optimization"></a>1.2 Optimization</h2><p>本文通过联合寻来你解决了$VAE_1, VAE_2, GAN_1, GAN_2$的学习问题，损失如下</p>
+<script type="math/tex; mode=display">\underset{E_1, E_2, G_1, G_2}{min} \underset{D_1}{max}L_{VAE_1}(E_1, G_1) + L_{GAN_1}(E_1, G_1, D_1) + L_{cc_1}(E_1, G_1, E_2, G_2)</script><script type="math/tex; mode=display">\underset{E_1, E_2, G_1, G_2}{min} \underset{D_2}{max}L_{VAE_2}(E_2, G_2) + L_{GAN_2}(E_2, G_2，D_2) + L_{cc_2}(E_2, G_2, E_1, G_1)</script><ul>
+<li>其中$L_{VAE}$旨在最小化变量的上界</li>
+<li>$L_{GAN}$确保了翻译后图像的真实性</li>
+<li>$L_{CC}$类似于循环一致性约束，确保了两次翻译后的图像与输入图像一致</li>
+</ul>
+<p>以上损失的具体形式请参考原论文</p>
+<h2 id="1-3-Experiment"><a href="#1-3-Experiment" class="headerlink" title="1.3 Experiment"></a>1.3 Experiment</h2><ul>
+<li>验证指标<ul>
+<li>average pixel accuracy over the images in the test set</li>
+<li>…</li>
+</ul>
+</li>
+<li>对比模型<ul>
+<li>DANN</li>
+<li>DTN</li>
+<li>CoGAN</li>
+</ul>
+</li>
+<li>数据集<ul>
+<li>map dataset</li>
+<li>Synthetic to real</li>
+<li>Dog breed conversion</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<p>下面展示本文部分的实验结果</p>
+<p><img src="/2019/12/11/extensive-reading1/1-exp1.jpg" alt></p>
+<p><img src="/2019/12/11/extensive-reading1/1-exp2.jpg" alt></p>
+<h1 id="2-Multimodal-Unsupervised-Image-to-Image-Translation"><a href="#2-Multimodal-Unsupervised-Image-to-Image-Translation" class="headerlink" title="2. Multimodal Unsupervised Image-to-Image Translation"></a>2. Multimodal Unsupervised Image-to-Image Translation</h1><blockquote>
+<p>针对什么问题？</p>
+</blockquote>
+<p>本文指出，在许多场景中，对于交叉领域的映射是多模态的，而现有的Image-to-Image Translation方法，如Pix2Pix, CycleGAN经仅仅只能得到一个确定性的映射。这是什么意思呢？</p>
+<ul>
+<li>举个例子，一个冬天的场景可能会有多个状态，天气、时间、光线等因素都会使得冬天的场景看起来不一样。</li>
+<li>而现有的方法，若是做 夏天-&gt;冬天，一张夏天的场景仅能转换出到一种冬天领域下的场景，无法做到多种不同的输出。</li>
+<li>特别是，本文指出，有些方法<strong>通过注入噪音完成图像中信息的改变，但是经过训练后的网络会忽略这些噪音，从而使得噪音的注入无效。</strong></li>
+</ul>
+<blockquote>
+<p>提出什么方法？</p>
+</blockquote>
+<p>故本文针对以上问题，提出了<strong>MUNIT</strong>模型，并做了以下的假设</p>
+<ul>
+<li><p>首先，假设图像的潜在空间(Latent Space)可以被分解为<strong>内容空间</strong>(Content Space)和<strong>风格空间</strong>(Style Space)。</p>
+<ul>
+<li>内容空间编码了在图像翻译时需要保留的内容</li>
+<li>风格空间代表了剩余那些输入图片中不需要保留的变量</li>
+</ul>
+</li>
+<li><p>其次，假设处于不同领域中的图像共享一个共同的内容空间，但是不共享风格空间。如下图所示，其中$X_1, X_2$共享同一个内容空间，但是风格空间彼此独立。</p>
+<p><img src="/2019/12/11/extensive-reading1/2-explain.jpg" alt></p>
+</li>
+</ul>
+<p>那么，在进行领域转换的时候，将内容编码和不同的随机采样的风格编码相结合，就可以得到多样化和多模态的输出。</p>
+<blockquote>
+<p>效果怎么样?</p>
+</blockquote>
+<p>实验表明该方法在多模态输出建模中的有效性，且能生成质量更好的图像。</p>
+<h2 id="2-1-Model"><a href="#2-1-Model" class="headerlink" title="2.1 Model"></a>2.1 Model</h2><p><img src="/2019/12/11/extensive-reading1/2-model.jpg" alt></p>
+<p>上图为模型的概述。整个模型包含了两个<strong>auto-encoders</strong>，也就是模型中的红线和蓝线，各自代表一个domain。</p>
+<ul>
+<li>在图(a)中，两个auto-encoders的作用如下<ul>
+<li>对于$x_1$，针对domain1的auto-encoders将其分解成风格空间$s_1$和内容空间$c_1$，再通过$L_1$损失重构成原图$\hat{x_1}$</li>
+<li>对于$x_2$，针对domain2的auto-encoders将其分解成风格空间$s_2$和内容空间$c_2$，再通过$L_1$损失重构成原图$\hat{x_2}$</li>
+</ul>
+</li>
+<li>在图(b)中，对于拆分后的$c_1, c_2$操作如下<ul>
+<li>通过采样获取风格编码$x_1$, 将其和$c_2$一起输入到domain1的auto-encoders中，使其能够重构为$\hat{s_1},\hat{c_2}$。</li>
+<li>通过采样获取风格编码$s_2$, 将其和$c_1$一起输入到domain2的auto-encoders中，使其能够重构为$\hat{s_2},\hat{c_1}$。</li>
+</ul>
+</li>
+</ul>
+<p>其中，auto-encoders的构造如下图</p>
+<p><img src="/2019/12/11/extensive-reading1/2-autoencoder.jpg" alt></p>
+<ul>
+<li>可以看到，内容编码和风格编码都有各自的Encoder才获得<ul>
+<li>对于Content Encoder，它由几个跨步卷积紧跟着几个残差块获得</li>
+<li>对于Style Encoder，它由几个跨步卷积紧跟着几个全局的池化，并接上了全连接层</li>
+</ul>
+</li>
+<li>之后，作者通过使用AdaIN方法将Content Code和Style Code结合了在一起，具体操作如下<ul>
+<li>对于Content Code，它继续接几个残差块来不断地传播语义特征</li>
+<li>对于Style Code，它通过MLP获得AdaIN的参数，在Content Code传播的过程中结合AdaIN参数</li>
+</ul>
+</li>
+<li>最后，再通过上采样获得最后的重构图像</li>
+</ul>
+<p>其中，AdaIN的公式如下</p>
+<script type="math/tex; mode=display">AdaIN(z, \gamma, \beta) = \gamma(\frac{z - \mu(z)}{\sigma(z)}) + \beta</script><ul>
+<li>z代表卷积后输出的激活值</li>
+<li>$\mu$代表通道均值</li>
+<li>$\sigma$代表通道标准差</li>
+<li>$\gamma, \beta$代表MLP生成的参数</li>
+</ul>
+<h2 id="2-2-Optimization"><a href="#2-2-Optimization" class="headerlink" title="2.2 Optimization"></a>2.2 Optimization</h2><ul>
+<li><p>首先，是图像重构损失(Image Reconstruction)，如下</p>
+<script type="math/tex; mode=display">L_{recon}^{x_1} = E_{x_1 \thicksim p(x_1)}[||G_1(E_1^c(x_1), E_1^s(x_1)) - x_1||_1]</script><ul>
+<li>即从Domain1中采样数据$x_1$，通过Domain1的Auto-Encoders来提取内容空间和风格空间，再通过Domain1的$G_1$转换为重构后的图像，和原始图像$x_1$做$L_1$损失。</li>
+<li>同理，可以推出$L_{recon}^{x_2}$损失。</li>
+</ul>
+</li>
+<li><p>其次，是隐藏重构损失（Latent Reconstruction）</p>
+<script type="math/tex; mode=display">L_{recon}^{c_1} = E_{c_1 \thicksim p(c_1),s_2 \thicksim q(s_2)}[||E_2^c(G_2(c_1, s_2)) - c_1||]</script><script type="math/tex; mode=display">L_{recon}^{s_2} = E_{c_1 \thicksim p(c_1),s_2 \thicksim q(s_2)}[||E_2^c(G_2(c_1, s_2)) - s_2||]</script><ul>
+<li>其中$q(s_2)$是先验分布$N(0, I)$中采样的，$p(c_1)$由$c_1 = E_1^c(x_1)$得到，$x_1 \thicksim p(x_1)$。</li>
+<li>$L_{recon}^{c_1}$通过$G_2$将$c_1, s_2$转化为Domain2中的图像，并通过Domain2中的内容解码器抽取内容空间，得到重构后的$c_1$的内容空间和原$c_1$做$L_1$损失</li>
+<li>$L_{recon}^{s_2}$通过$G_2$将$c_1, s_2$转化为Domain2中的图像，并通过Domain2中的风格解码器抽取风格空间，得到重构后的风格空间和原$s_2$做$L_1$损失</li>
+<li>同理，可以推出<script type="math/tex">L_{recon}^{x_2}, L_{recon}^{c_2}, L_{recon}^{s_1}</script>。</li>
+</ul>
+</li>
+<li><p>最后，是对抗损失(Adversarial Loss)</p>
+<script type="math/tex; mode=display">L_{GAN}^{x_2} = E_{c_1 \thicksim p(c_1), s_2 \thicksim p(s_2)}[log(1 - D_2(G_2(c_1, s_2)))] + E_{x_2 \thicksim p(x_2)}[logD_2(x_2)]</script><ul>
+<li>判别器$D_2$尝试区分由$x_1$翻译到$x_2$中的图像与$X_2$中的真实图像</li>
+<li>同理，可以推出$D<em>1$的损失$$L</em>{GAN}^{x_1}$$</li>
+</ul>
+</li>
+</ul>
+<p>根据以上的单一损失描述，可以得到本文的总损失如下：</p>
+<script type="math/tex; mode=display">\underset{E_1, E_2, G_1, G_2}{min} \underset{D_1, D_2}{max}L(E_1, E_2, G_1, G_2, D_1, D_2) = L_{GAN}^{x_1} + L_{GAN}^{x_2} + \\ \lambda_x(L_{recon}^{x_1} + L_{recon}^{x_2}) + \lambda_c(L{recon}^{c_1} + L_{recon}^{c_2}) + \lambda_s(L_{recon}^{s_1} + L_{recon}^{s_2})</script><p>其中，$\lambda_x, \lambda_c, \lambda_s$都是超参数。</p>
+<h2 id="2-3-Experiment"><a href="#2-3-Experiment" class="headerlink" title="2.3 Experiment"></a>2.3 Experiment</h2><ul>
+<li>验证指标<ul>
+<li>Human Preference，即人们对图像的欣赏度</li>
+<li>LPIPS Distance，验证翻译后的多样性</li>
+<li>Inception Score，验证多模态翻译后的真实度</li>
+</ul>
+</li>
+<li>对比模型<ul>
+<li>UNIT</li>
+<li>CycleGAN</li>
+<li>CycleGAN*</li>
+<li>BicycleGAN</li>
+</ul>
+</li>
+<li>数据集<ul>
+<li>Edges &lt;-&gt; Shoes/handbags</li>
+<li>Animal Image Translation</li>
+<li>Street Scene Images</li>
+<li>Summer &lt;-&gt; Winter</li>
+</ul>
+</li>
+</ul>
+<p>下面是挑选的实验中的几张效果图，总之就是比其他方法真实，且多样性好</p>
+<p><img src="/2019/12/11/extensive-reading1/2-exp1.jpg" alt></p>
+<p><img src="/2019/12/11/extensive-reading1/2-exp2.jpg" alt></p>
+<p><img src="/2019/12/11/extensive-reading1/2-exp4.jpg" alt></p>
+<h1 id="3-Diverse-Image-to-Image-Translation-via-Disentangled-Representations"><a href="#3-Diverse-Image-to-Image-Translation-via-Disentangled-Representations" class="headerlink" title="3. Diverse Image-to-Image Translation via Disentangled Representations"></a>3. Diverse Image-to-Image Translation via Disentangled Representations</h1><p>在写这篇论文泛读之前想说的话：<strong>本文是本次所有泛读文章中，文笔最好，实验最多的；若是对Image-to-Image Translation中Disentangle做法感兴趣，可以先从这篇读起。</strong></p>
+<blockquote>
+<p>针对什么问题？</p>
+</blockquote>
+<p>本文指出Image-to-Image Translation旨在学习两个视觉域中的映射关系，但存在以下两个挑战</p>
+<ul>
+<li>缺乏对齐的训练数据</li>
+<li>输入单一的图像，缺乏多样化的输出结果</li>
+</ul>
+<blockquote>
+<p>提出什么方法？</p>
+</blockquote>
+<p>为了生成多样化的输出且不依靠对齐的训练数据，本文将图像嵌入到两个空间中</p>
+<ul>
+<li>领域不变的内容空间(Domain-Invariant Content Space)，来捕捉共享信息</li>
+<li>领域专有的属性空间(Domain-Specific Attribute Space)</li>
+</ul>
+<p>如下图所示</p>
+<p><img src="/2019/12/11/extensive-reading1/3-method.jpg" alt></p>
+<ul>
+<li>其中，CycleGAN将$x, y$映射到分离的隐层空间</li>
+<li>UNIT将$x, y$映射到共享的隐层空间</li>
+<li>MUNIT和DRIT将$x, y$分别映射到共享的内容空间，和专有的属性空间</li>
+</ul>
+<blockquote>
+<p>效果怎么样？</p>
+</blockquote>
+<p>大量的实验表明本文提出的方法能够生成多样化和真实的图像，并且能够被运用于多领域的图像翻译来生成多样性的输出。</p>
+<h2 id="3-1-Model"><a href="#3-1-Model" class="headerlink" title="3.1 Model"></a>3.1 Model</h2><p>本文的目标是在没有成对训练数据的情况下，学习两个视觉领域之间的多模态映射。其中，本文完整的模型如下图所示</p>
+<p><img src="/2019/12/11/extensive-reading1/3-model.jpg" alt></p>
+<ul>
+<li><p>针对领域$x, y$，存在各自的内容编码器$E_x^c, E_y^c$和属性编码器$E_x^a, E_y^a$，以及各自的解码器$G_x, G_y$。</p>
+</li>
+<li><p>在训练过程中，我们以领域$x$中的图像为例。第一步，对于领域$x$中的图像使用$E_x^a$抽取专有属性，再使用$E_y^c$抽取领域$y$中的内容信息，并通过领域$x$的解码器$G_x$将映射到领域$x$中。第二步，使用$E_x^a, E_x^c$抽取映射后图像的内容信息和专有属性，再使用$E_y^c$抽取领域$y$中的内容信息，最后通过领域$x$的解码器$G_x$将其映射回领域$x$，即得到重构后的$\hat{x}$。领域$y$中的图像同理。</p>
+</li>
+<li><p>在测试过程中，分为两种情况</p>
+<ul>
+<li>一是使用随机属性进行测试。输入图像$x$，使用$E_x^c$抽取图像内容，并采样属性信息，通过$G_y$将其映射到领域$y$中。</li>
+<li>二是使用给定的图像抽取专有属性。输入图像$x$，使用$E_x^c$抽取领域$x$中的图像信息，再使用$E_y^a$抽取领域$y$中的图像专有属性，最后通过解码器$G_y$生成领域$y$中的图像。</li>
+</ul>
+</li>
+<li><p>为了取得更好的分解效果，本文还采用了两个策略</p>
+<ul>
+<li><p>参数共享(Weight-Sharing)。基于两个领域共享相同的隐层空间，本文共享了$E_X^c, E_Y^c$的最后几层和$G_X, G_Y$的第一层。在参数共享的策略下，内容表达能够被强制映射到同一个空间，即使得判别器无法判断学习到的内容表达到底属于领域$x$还是领域$y$。</p>
+</li>
+<li><p>内容判别器(Content Discriminator)。内容的对抗损失如下</p>
+<script type="math/tex; mode=display">L_{adv}^{content}(E_X^c, E_Y^c, D^c) = E_x[\frac{1}{2}logD^c(E_X^c(x)) + \frac{1}{2}log(1 - D^c(E^c_X(x))) + \\ E_y[\frac{1}{2}logD^c(E_Y^c(y)) + \frac{1}{2}log(1 - D^c(E^c_Y(y)))]</script></li>
+</ul>
+</li>
+</ul>
+<p>本文除了双领域之间的转换，还尝试了多领域之间的转化，我们这里也提一下，模型如下图</p>
+<p><img src="/2019/12/11/extensive-reading1/3-multiI2I.jpg" alt></p>
+<p>模型和双领域转换类型，存在两方面的不同</p>
+<ul>
+<li>多了领域编码(Domain Code)，其实就是$One-hot$向量，领域编码将会在$E_a$抽取领域的专有属性时嵌入到特征里。</li>
+<li>内容判别器不仅需要判别图像是否真实，还需要判别来自哪一个领域，应该就是条件GAN判别器的做法，输入分为图像内容和条件。</li>
+</ul>
+<h2 id="3-2-Optimization"><a href="#3-2-Optimization" class="headerlink" title="3.2 Optimization"></a>3.2 Optimization</h2><p>除了上述的内容判别器损失，本文还使用了交叉循环一致性损失(Cross-cycle Consistency Loss)，使得模型可以将任意图像的内容和目标领域中另一个图像的属性表达结合在一起。</p>
+<ul>
+<li><p>交叉循环一致性损失分为两个步骤：前向翻译和后向翻译，也就是上文模型图的内容，即映射和重构。损失如下</p>
+<script type="math/tex; mode=display">L_1^{cc}(G_X, G_Y, E_X^c, E_Y^c, E_X^a, E_Y^a) = E_{x,y}[||G_X(E_Y^c(v), E_X^a(u)) - x||_1 + \\ ||G_Y(E_X^c(u), E_Y^a(v)) - y||_1]</script></li>
+</ul>
+<p>除了内容对抗损失和交叉循环一致性损失，本文还使用了其他损失来确保网络的训练，如下图所示</p>
+<p><img src="/2019/12/11/extensive-reading1/3-loss.jpg" alt></p>
+<ul>
+<li>$L_{1}^{recon}$在训练中完成自我重构</li>
+<li>$L_{KL}$从先验高斯分布中采样，对齐属性的表达</li>
+<li>$L_{adv}^{domain}$鼓励生成器G在每个领域生成真实的图像</li>
+<li>$L_1^{latent}$对隐藏属性进行重构</li>
+<li>$L_{ms}$进一步提升多样性</li>
+</ul>
+<p>损失的详情请看原文。</p>
+<h2 id="3-3-Experiment"><a href="#3-3-Experiment" class="headerlink" title="3.3 Experiment"></a>3.3 Experiment</h2><ul>
+<li>验证指标<ul>
+<li>FID</li>
+<li>LPIPS</li>
+<li>JSD and NDB</li>
+<li>User Performance</li>
+</ul>
+</li>
+<li>对比模型<ul>
+<li>DRIT</li>
+<li>MUNIT</li>
+<li>Cycle/Bicycle GAN</li>
+</ul>
+</li>
+<li>数据集<ul>
+<li>Winter -&gt; Summer</li>
+<li>Cat -&gt; Dog</li>
+</ul>
+</li>
+</ul>
+<p>本文的实验极其丰富，此外还尝试了生成高分辨率的图像，建议大家阅读原文，我下面就稍微贴几张。</p>
+<p><img src="/2019/12/11/extensive-reading1/3-exp1.jpg" alt></p>
+<p><img src="/2019/12/11/extensive-reading1/3-exp2.jpg" alt></p>
+<p><img src="/2019/12/11/extensive-reading1/3-exp3.jpg" alt></p>
+<h1 id="4-Image-to-Image-Translation-for-Cross-Domain-Disentanglement"><a href="#4-Image-to-Image-Translation-for-Cross-Domain-Disentanglement" class="headerlink" title="4. Image-to-Image-Translation-for-Cross-Domain-Disentanglement"></a>4. Image-to-Image-Translation-for-Cross-Domain-Disentanglement</h1><p>本文的主要思想和上述论文类似，主要不同点在于引入了$GRL$模块使得编码器能分别提取共享信息和专有属性。</p>
+<blockquote>
+<p>针对什么问题？</p>
+</blockquote>
+<p>从场景的固有属性出发，将光照、阴影、视点、物体方向等场景事件分离出来，一直是计算机视觉长期追求的目标。当应用于深度学习时，这允许模型了解实体独立的变量因素，若信息与当前任务无关，那么模型可以沿着特定的变化因素边缘化信息。这样的分解过程对于基于表示学习的任务提供了更加精准的控制。故本文旨在将分解表示和图像翻译结合在一起，以达到更好的效果。</p>
+<blockquote>
+<p>提出什么方法？</p>
+</blockquote>
+<p>本文将分解目标和图像翻译结合，引入了跨域分解的概念，其目的是将域内专有的属性和跨域共享的属性分开。为了做到这一点，本文将交叉领域中图像的表示分解为三部分：交叉领域共有的信息，以及各自领域专有的信息，如下图</p>
+<p><img src="/2019/12/11/extensive-reading1/4-concept.jpg" alt></p>
+<ul>
+<li>图中两个数字领域共享的是没有颜色信息的数字</li>
+<li>专有的信息是，数字的背景信息等</li>
+</ul>
+<blockquote>
+<p>效果怎么样？</p>
+</blockquote>
+<ul>
+<li>多样性样本(Sample diversity)。可以基于给定的输入图片输出多样化的结果</li>
+<li>跨域检索(Cross Domain Retrieval)。可以根据域之间共享的表示部分在两个域中检索相似的图像</li>
+<li>专有域的图像迁移(Domain-specific Image Transfer)。领域专有的特征可以在图像间传输</li>
+<li>专有域的插值(Domain-specific Interpolation)。可以在两个图像间插入领域专有的特征。</li>
+</ul>
+<h2 id="4-1-Model"><a href="#4-1-Model" class="headerlink" title="4.1 Model"></a>4.1 Model</h2><p>本文的模型如下图，左边是图像翻译模块，右边是跨域自动编码器。</p>
+<p><img src="/2019/12/11/extensive-reading1/4-model.jpg" alt></p>
+<ul>
+<li>首先要分清楚图中各模块的作用，本文对模块的命名不是很友好，建议先看右边的跨域编码器。我们以右图中对于领域$X$的操作为例，领域$X$的编码器$G_e$将图像分解为共享的信息部分$S^x$和专有的属性部分$E^x$；再将$E^x$和来自领域$Y$中由编码器$F_e$抽取的图像的共享信息$E^y$相结合，输入到领域$X$的解码器$F_d$，可以得到重构后的图像$x$。同理对于领域$Y$的操作。</li>
+<li>我们再看图中左边的图像翻译。我们以领域$X$操作为例，依然通过$G_e$提取共享信息$S_x$以及专有特征$E^x$。<ul>
+<li>首先讲一下GRL操作。在黄色虚线那部分，作者认为由于$E^x$中体现的是专有属性，必不能包含领域$Y$中的信息，所以仅仅使用$E^x$不可能生成领域$Y$中的图像。为了强化这种认知，作者用了我看起来很“奇葩”的行为，他尝试使用$E^x$生成领域$Y$中的图像，却有积极的引导特征学习来防止这种情况发生。故作者专门设置了一个GRL(Gradient Reversal Layer)模块来学习与域无关的特性。在网络的前向传播过程中，它作为指示函数；在反向传播的时候，返回相应分支的梯度。</li>
+<li>剩下的就是常规操作，将$S^x$和采样得到的属性结合，并通过解码器$G_d$将$x$翻译到领域$Y$中，再通过领域$Y$的编码器提取共享信息和专有属性。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-Optimization"><a href="#4-2-Optimization" class="headerlink" title="4.2 Optimization"></a>4.2 Optimization</h2><ul>
+<li><p>重构隐层空间。用于翻译的解码器接收共享的表示$S$以及用于充当专有属性的随机输入噪音作为输入，在这里本文从8维的噪音向量$z$中采样，这也要求专有属性表示的能够满足合理的分布。为此，作者在这里加入了原始对抗损失，训练使得能从$N(0, I)$中采样接近于$E^x$分布的特征。</p>
+</li>
+<li><p>重构后的图像必须与解码器的输入匹配，因此需要在原图像和重构后的图像$S^X$中加入$L_1$损失。</p>
+<script type="math/tex; mode=display">L_{recon}^X = E_{x \thicksim X}[||G_e(G_d(S^X, z)) - (S^X, z)||]</script></li>
+<li><p>为了使得翻译后的图像接近于真实数据分布，还需要引入对抗损失，本文作者采用了$WGAN-GP$的损失，以获得稳定的训练和高质量的输出</p>
+<script type="math/tex; mode=display">L_{Disc}^X = E_{\tilde{x} \thicksim \tilde{X}}[D(\tilde{x})] - E_{x \thicksim X}[D(x)] + \lambda \cdot E_{\hat{x} \thicksim \hat{X}}[(||\nabla_{\hat{x}}D(\hat{x})||_2 - 1)^2]</script><script type="math/tex; mode=display">L_{Gen}^X = -E_{\tilde{x} \thicksim \tilde{X}}[D(\tilde{x})]</script></li>
+<li><p>最后在跨域自动编码器中，重建的图像需要接近于原图，故有以下损失</p>
+<script type="math/tex; mode=display">L_{auto}^X = E_{x \thicksim X}[||x^{'} - x||]</script></li>
+</ul>
+<p>损失的详情请查看原文</p>
+<h2 id="4-3-Experiment"><a href="#4-3-Experiment" class="headerlink" title="4.3 Experiment"></a>4.3 Experiment</h2><ul>
+<li>验证指标<ul>
+<li>引入某篇论文中相关的读量协议</li>
+</ul>
+</li>
+<li>对比方法<ul>
+<li>BicycleGAN</li>
+<li>Pix2Pix</li>
+</ul>
+</li>
+<li>数据集<ul>
+<li>MNIST-CD</li>
+<li>MNIST-CB</li>
+<li>3D car models </li>
+<li>3D chair models</li>
+</ul>
+</li>
+</ul>
+<p>最后，给一些实验截图，有兴趣的朋友可自行阅读原文。</p>
+<p><img src="/2019/12/11/extensive-reading1/4-exp.jpg" alt></p>
+<h1 id="5-Conditional-Image-to-Image-translation"><a href="#5-Conditional-Image-to-Image-translation" class="headerlink" title="5. Conditional Image-to-Image translation"></a>5. Conditional Image-to-Image translation</h1><blockquote>
+<p>针对什么问题？</p>
+</blockquote>
+<p>现有的图像翻译方法缺乏控制翻译结果的能力，从而导致生成的结果缺乏多样性。</p>
+<blockquote>
+<p>提出什么方法？</p>
+</blockquote>
+<p>本文提出了条件图像翻译的概念，即可以在给定的图像条件下，将源于转换为目标域中的图像，如下图示</p>
+<p><img src="/2019/12/11/extensive-reading1/5-concept.jpg" alt></p>
+<ul>
+<li>图a以人脸作为条件，生成指定领域的人脸</li>
+<li>图b以背包作为条件，生成指定领域的背包</li>
+</ul>
+<p>该模型要求生成的图像必须从目标域中继承条件图像的特定域特征。</p>
+<blockquote>
+<p>效果怎么样？</p>
+</blockquote>
+<p>本文进行了人脸转换、轮廓到背包等实验，并证明了该方法的有效性。</p>
+<h2 id="5-1-Model"><a href="#5-1-Model" class="headerlink" title="5.1 Model"></a>5.1 Model</h2><p>本文提出的模型如下图所示</p>
+<p><img src="/2019/12/11/extensive-reading1/5-model.jpg" alt></p>
+<ul>
+<li>上图中有两个编码器$e_A, e_B$以及两个解码器$g_A, g_B$。<ul>
+<li>编码器用来抽取特征，输入图像后输出两类特征：领域无关特征(Domain-Independent Features)及领域专有特征(Domain-Specific Features)。（感觉名字取得很不友好）<ul>
+<li>在翻译过程中，领域无关特征会保留。如将男人脸转为女人脸时，会保留脸的边缘，眼睛，鼻子</li>
+<li>在翻译过程中，领域专有特征会改变，如脸的头发及风格。（例子也举得不友好）</li>
+</ul>
+</li>
+<li>解码器充当生成器，将源域中图像的领域无关特征和目标域中图像的领域专有特征作为输入，输出属于目标域中的生成图像</li>
+</ul>
+</li>
+<li>在编码器中，编码器网络会被切分成两个分支：一个接上卷积网络用来抽取领域无关特征，另一个接上全连接层用来抽取领域专有特征，通过损失函数的更新实现两分支不同的功能。</li>
+<li>现在以领域$X$为例，讲一下模型的流程。<ul>
+<li>输入图像$x_A$，编码器$e_A$提取领域不变特征$x_A^i$以及领域专有特征$x_A^S$，编码器$e_B$提取图像$x_B$的领域专有特征$x_B^s$。</li>
+<li>接着，将<script type="math/tex">s_A^i</script>和<script type="math/tex">x_A^S</script>结合并输入解码器<script type="math/tex">g_B</script>得到映射到领域<script type="math/tex">B</script>中的图像<script type="math/tex">x_{AB}</script>。</li>
+<li>判别器<script type="math/tex">d_B</script>接收<script type="math/tex">x_{AB}</script>及<script type="math/tex">x_B</script>以判断生成数据是否真实。</li>
+<li>最后，将<script type="math/tex">x_{AB}</script>通过编码器<script type="math/tex">e_B</script>拆分出<script type="math/tex">x_{AB}</script>的领域不变重构特征<script type="math/tex">\hat{x}_A^i</script>以及领域专有重构特征<script type="math/tex">\hat{x}_B^s</script>，并将<script type="math/tex">\hat{x}_A^i</script>和<script type="math/tex">x^s_A</script>结合输入解码器<script type="math/tex">g_A</script>，以得到重构后的图像<script type="math/tex">\hat{x}_A</script>。</li>
+</ul>
+</li>
+<li>领域$Y$同理。</li>
+</ul>
+<h2 id="5-2-Optimization"><a href="#5-2-Optimization" class="headerlink" title="5.2 Optimization"></a>5.2 Optimization</h2><ul>
+<li><p>对抗损失(GAN Loss)。为了保证<script type="math/tex">x_{AB},x_{BA}</script>都能映射到相关的领域中，本文设计了判别器<script type="math/tex">d_A,d_B</script>损失如下</p>
+<script type="math/tex; mode=display">l_{GAN} = log(d_A(x_A)) + log(1 - d_A(x_{BA})) + log(d_B(x_B)) + log(1 - d_B(x_{AB}))</script></li>
+<li><p>双重学习损失(Dual Learning Loss)，使得模型最小化重构损失，如下</p>
+<p><script type="math/tex">l_{dual}^{im}(x_A, x_B) = ||x_A - \hat{x}_A||^2 + ||x_B - \hat{x}_B||^2</script>,</p>
+<p><script type="math/tex">l_{dual}^{di}(x_A, x_B) = ||x_A^i - \hat{x}_A^i|| + ||x_B^i - \hat{x}_B^i||^2</script>,</p>
+<p><script type="math/tex">l_{dual}^{ds}(x_A, x_B) = ||x_A^s, \hat{x}_A^s||^2 + ||x_B^s - \hat{x}_B^s||^2</script>.</p>
+</li>
+</ul>
+<h2 id="5-3-Experiment"><a href="#5-3-Experiment" class="headerlink" title="5.3 Experiment"></a>5.3 Experiment</h2><ul>
+<li>验证指标<ul>
+<li>本文的都是视觉性实验，通过观赏性来验证模型，且输入图像为64x64大小，怀疑是经费不够</li>
+</ul>
+</li>
+<li>对比模型<ul>
+<li>DualGAN</li>
+<li>DualGAN-c</li>
+<li>GAN-c</li>
+</ul>
+</li>
+<li>数据集<ul>
+<li>men-&gt;women</li>
+<li>edges-&gt;shoes</li>
+</ul>
+</li>
+</ul>
+<p>下面贴几张模型的效果图</p>
+<p><img src="/2019/12/11/extensive-reading1/5-exp.jpg" alt></p>
+<p>最后，感谢前辈们的付出，Respect!</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    GodWriter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://godwriter.github.io/2019/12/11/extensive-reading1/" title="论文泛读1：基于Disentangle的Image-to-Image Translation">https://godwriter.github.io/2019/12/11/extensive-reading1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/10/self-ensembing/" rel="next" title="Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation">
+                <i class="fa fa-chevron-left"></i> Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/03/gan-can-not-generate/" rel="prev" title="Seeing What a GAN Cannot Generate">
+                Seeing What a GAN Cannot Generate <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="GodWriter">
+            
+              <p class="site-author-name" itemprop="name">GodWriter</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Unsupervised-Image-to-Image-Translation-Networks"><span class="nav-text">1. Unsupervised Image-to-Image Translation Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Model"><span class="nav-text">1.1 Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Optimization"><span class="nav-text">1.2 Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Experiment"><span class="nav-text">1.3 Experiment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Multimodal-Unsupervised-Image-to-Image-Translation"><span class="nav-text">2. Multimodal Unsupervised Image-to-Image Translation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Model"><span class="nav-text">2.1 Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Optimization"><span class="nav-text">2.2 Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Experiment"><span class="nav-text">2.3 Experiment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Diverse-Image-to-Image-Translation-via-Disentangled-Representations"><span class="nav-text">3. Diverse Image-to-Image Translation via Disentangled Representations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Model"><span class="nav-text">3.1 Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Optimization"><span class="nav-text">3.2 Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Experiment"><span class="nav-text">3.3 Experiment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Image-to-Image-Translation-for-Cross-Domain-Disentanglement"><span class="nav-text">4. Image-to-Image-Translation-for-Cross-Domain-Disentanglement</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Model"><span class="nav-text">4.1 Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Optimization"><span class="nav-text">4.2 Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-Experiment"><span class="nav-text">4.3 Experiment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Conditional-Image-to-Image-translation"><span class="nav-text">5. Conditional Image-to-Image translation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Model"><span class="nav-text">5.1 Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-Optimization"><span class="nav-text">5.2 Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-Experiment"><span class="nav-text">5.3 Experiment</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GodWriter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

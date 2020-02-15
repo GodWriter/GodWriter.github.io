@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="paper,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Abstract 基于深度学习的语义分割有着固有的缺陷：需要大量的数据 本文引入self-ensembling，想基于无监督下的领域自适应来解决数据问题，但通过self-ensembling中微调过的人工数据难以缩减语义分割中巨大的领域距离(Domain Gap) 为此，本文提出一个由两部分组成的框架 首先，基于GAN提出一个数据增强方法，能有效促进领域的对齐(Domain Alignmen">
+<meta name="keywords" content="paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation">
+<meta property="og:url" content="https://godwriter.github.io/2019/12/10/self-ensembing/index.html">
+<meta property="og:site_name" content="GodWriter">
+<meta property="og:description" content="1. Abstract 基于深度学习的语义分割有着固有的缺陷：需要大量的数据 本文引入self-ensembling，想基于无监督下的领域自适应来解决数据问题，但通过self-ensembling中微调过的人工数据难以缩减语义分割中巨大的领域距离(Domain Gap) 为此，本文提出一个由两部分组成的框架 首先，基于GAN提出一个数据增强方法，能有效促进领域的对齐(Domain Alignmen">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure1.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure2.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Table1.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure3.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure4.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure5.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure6.jpg">
+<meta property="og:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure7.jpg">
+<meta property="og:updated_time" content="2019-12-13T01:16:32.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation">
+<meta name="twitter:description" content="1. Abstract 基于深度学习的语义分割有着固有的缺陷：需要大量的数据 本文引入self-ensembling，想基于无监督下的领域自适应来解决数据问题，但通过self-ensembling中微调过的人工数据难以缩减语义分割中巨大的领域距离(Domain Gap) 为此，本文提出一个由两部分组成的框架 首先，基于GAN提出一个数据增强方法，能有效促进领域的对齐(Domain Alignmen">
+<meta name="twitter:image" content="https://godwriter.github.io/2019/12/10/self-ensembing/Figure1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://godwriter.github.io/2019/12/10/self-ensembing/">
+
+
+
+
+
+  <title>Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation | GodWriter</title>
+  
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/GodWriter" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GodWriter</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2019/12/10/self-ensembing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GodWriter">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GodWriter">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T10:12:17+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-Abstract"><a href="#1-Abstract" class="headerlink" title="1. Abstract"></a>1. Abstract</h1><ul>
+<li>基于深度学习的语义分割有着固有的缺陷：需要大量的数据</li>
+<li>本文引入self-ensembling，想基于无监督下的领域自适应来解决数据问题，但通过self-ensembling中微调过的人工数据难以缩减语义分割中巨大的领域距离(Domain Gap)</li>
+<li>为此，本文提出一个由两部分组成的框架<ul>
+<li>首先，基于GAN提出一个数据增强方法，能有效促进领域的对齐(Domain Alignment)</li>
+<li>其次，基于增强后的数据，将self-ensembling运用到分割网络中以提升模型的能力</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-Introduction"><a href="#2-Introduction" class="headerlink" title="2. Introduction"></a>2. Introduction</h1><ul>
+<li><p>语义分割的任务：给图像中的每个像素点都分类。</p>
+</li>
+<li><p>大量基于深度学习的算法能够获得较好的效果，但过于依赖数据。为避免人工标注的繁琐和耗时，研究人员利用计算机图形学得到合成数据及所对应的分割标签。而合成数据训练得到的分割模型难以媲美使用真实数据训练得到的，因为存在了称之为领域迁移(Domain Shift)的分布不同(Distribution Difference)。</p>
+</li>
+<li><p>Unsupervised domain adaptation通过将标记过的数据集中的知识迁移到未标记过的数据集，来解决Domain Shift的问题。</p>
+<ul>
+<li>最近的方法多集中在对齐源数据和目标数据中抽取到的特征。如基于对抗训练，通过域混肴(Domain Confusion)来最小化领域之间的差异(Domain Discrepancy)。</li>
+<li>然而，对抗方法也有缺陷，为了对齐两个不同领域的全局分布可能会造成负迁移(Negative Transfer)，即将目标特征对齐到了源特征中错误的语义分类。<strong>通俗点说，就是将天空的特征或者风格，迁移到了马路上</strong>。特别是，数据集中的某个类别比较稀少，更容易产生负迁移。</li>
+</ul>
+</li>
+<li><p>为解决负迁移，本文引入了<strong>self-ensembling</strong>。</p>
+<ul>
+<li>self-ensembling由学生网络和教师网络组成<ul>
+<li>学生网络被迫基于老师提供的目标数据，做出协同的预测</li>
+<li>教师网络的参数是学生网络的均值，所以教师在目标数据上做的预测可以看作是学生的伪标签</li>
+</ul>
+</li>
+<li>虽然self-ensembling在图像分类上有很好的效果，若想用于成功对齐领域，它需要大力调节过的人工增强数据。此外，虽然self-ensembling得到的几何变化较大的数据能有效用于分类，它并不适合于语义分割中的Domain Shift。</li>
+</ul>
+</li>
+<li><p>为改进self-ensembling，本文设计了新的数据增强方法</p>
+<ul>
+<li>基于GAN，生成能够保留语义内容的增强图像。因为未保留语义内容的图像，将会破坏分割的性能，由于<strong>增强后的图像和作为源标签的图像在像素上的不匹配</strong>。</li>
+<li>为解决上述问题，该方法于生成器中加入了语义约束(Semantic Constraint)，来保留全局和局部的结构。</li>
+<li>此外，本文提出了目标导向的生成器，能够基于目标领域抽取的风格信息来生成图片。这样，该方法生成的图像又能保留语义信息，又能只迁移目标图像的风格。</li>
+</ul>
+</li>
+<li><p>大多数Image-to-Image Translation都是依赖于不同形式的Cycle-Consistency</p>
+<ul>
+<li>有两个限制<ul>
+<li>需要多余的模块，比如两个生成器</li>
+<li>若是数据不平衡的话，源领域和目标领域的约束过于强烈。<strong>也就是说，不管怎么生成，就那几种图像，类似于Model Collapse吧</strong></li>
+</ul>
+</li>
+<li>而本文的方法由于它的设计，就不需要考虑Cycle-consistency了</li>
+</ul>
+</li>
+<li><p>整个模型的框架如下图所示</p>
+<p><img src="/2019/12/10/self-ensembing/Figure1.jpg" alt="Figure1"></p>
+<ul>
+<li>步骤一，给定有标签的合成数据及无标签的真实数据，生成带有标签的增强数据(我认为，这里的标签就是源标签)</li>
+<li>步骤二，作者将关键信息写到了这里，使用两个分割网络作为教师和学生，以使用Self-ensembling算法。这两个网络都使用了合成数据、增强后的数据以及真实数据。在训练过程中，教师网络会将知识迁移到学生网络中。</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-Proposed-Method"><a href="#3-Proposed-Method" class="headerlink" title="3. Proposed Method"></a>3. Proposed Method</h1><p>​    提升self-ensembling用于语义分割的兼容性的方法是，基于GAN增强后的数据来对齐源领域和目标领域之间的表达，而不是self-ensembling用于分类中的几何转变。为了这个目的，本文设计了以下的模型。</p>
+<h2 id="3-1-Target-guided-generator"><a href="#3-1-Target-guided-generator" class="headerlink" title="3.1 Target-guided generator"></a>3.1 Target-guided generator</h2><ul>
+<li><p>TGCF-DA的模型图如下所示</p>
+<p><img src="/2019/12/10/self-ensembing/Figure2.jpg" alt="Figure2"></p>
+<ul>
+<li>基于假设，图像表达可被分为两部分：内容和图像，设计了以上结构<ul>
+<li>使用Souce Encoder来抽取源图像的内容表达</li>
+<li>再使用Target Encoder来抽取目标图像的风格表达</li>
+</ul>
+</li>
+<li>为了结合源图像的内容和目标图像的风格，使用AdaIN算法</li>
+</ul>
+</li>
+<li><p>根据上面的设计，生成器G得到的图像将会在保留源图像内容的同时，迁移目标图像的风格。<strong>也就是改变源图像，如GTA5的虚拟风格，变成现实风格</strong>。最后，将生成图像作为fake data，目标领域作为real data，输入判别器。</p>
+</li>
+</ul>
+<h2 id="3-2-Semantic-constraint"><a href="#3-2-Semantic-constraint" class="headerlink" title="3.2 Semantic constraint"></a>3.2 Semantic constraint</h2><ul>
+<li>由于没有使用Cycle-consistency，本文使用Semantic Constriant来约束生成图像的语义信息。具体的做法如下<ul>
+<li>设定一个预训练好的分割模型，本文使用的是FCN-8s</li>
+<li>将生成的图像输入得到分割后的掩码</li>
+<li>分割后的掩码和源图像的标签做交叉熵</li>
+</ul>
+</li>
+<li>这个做法类似于相当于风格迁移中，计算内容损失的做法。</li>
+</ul>
+<h2 id="3-3-Target-guided-and-cycle-free-data-augmentation"><a href="#3-3-Target-guided-and-cycle-free-data-augmentation" class="headerlink" title="3.3 Target-guided and cycle-free data augmentation"></a>3.3 Target-guided and cycle-free data augmentation</h2><ul>
+<li><p>本文对于GAN框架的构建如下</p>
+<ul>
+<li><p>Discriminator的构建是基于Hpix2pix的，详见原文中的参考文献</p>
+</li>
+<li><p>使用LSGAN的损失作为对抗损失，并基于spectral normalization的方法稳定GAN的训练</p>
+<script type="math/tex; mode=display">L_{GAN}(G, D) = E_{(x_s, s_t)\thicksim(P_S, P_T)}[D(G(s_s, s_t))^2] + E_{x_t\thicksim P_t}[(D(x_t) - 1)^2].</script></li>
+</ul>
+</li>
+<li><p>对抗损失能够保证G生成的新图像在视觉上和目标图像相似。由于分割模型$f_{seg}$固定了，可以联合训练生成器和判别器来优化总损失</p>
+<script type="math/tex; mode=display">L_{TGCF-DA} = L_{GAN} + \lambda L_{sem}</script></li>
+<li><p>经过上述损失预训练后的生成器，将被用来合成增强数据，为后续的self-ensembling做准备。</p>
+</li>
+</ul>
+<h2 id="3-4-Self-ensembling"><a href="#3-4-Self-ensembling" class="headerlink" title="3.4 Self-ensembling"></a>3.4 Self-ensembling</h2><ul>
+<li><p>构建了教师网络$f_T$和学生网络$f_S$。步骤t中，教师网络的参数$t_i$由学生网络根据下列公式计算得到</p>
+<script type="math/tex; mode=display">t_i = \alpha t_{i-1} + (1 - \alpha)s_i</script></li>
+<li><p>在训练的过程中，每个mini-batch都会包含以下数据</p>
+<ul>
+<li>source samples  源样本</li>
+<li>augmented samples  增强样本</li>
+<li>target samples  目标样本</li>
+</ul>
+</li>
+<li><p>源样本和增强样本将会被用来计算监督损失$L_{sup}$，即对于语义分割的交叉熵。这个损失函数能使得学生网络，对于源数据和增强数据，都产生语义上更加精准的预测。</p>
+</li>
+<li><p>一致性损失$L_{con}$是学生网络和教师网络生成的预测图的均方差</p>
+<script type="math/tex; mode=display">L_{con}(f_S, f_T) = E_{x_t \thicksim P_T}[||\sigma (f_S(x_t)) - \sigma (f_T(x_t))||^2]</script><p>这里的$\sigma$是softmax函数，用来计算预测图的概率</p>
+</li>
+<li><p>总体的损失如下</p>
+<script type="math/tex; mode=display">L_{total} = L_{sup} + \delta_{con} L_{con}</script><p>这里的$\delta_{con}$是一致性损失的权重</p>
+</li>
+</ul>
+<h2 id="3-5-Data-augmentation-for-target-samples"><a href="#3-5-Data-augmentation-for-target-samples" class="headerlink" title="3.5 Data augmentation for target samples"></a>3.5 Data augmentation for target samples</h2><p>​    看到这一块内容，稍微有些迷糊，特别是作者的第一句话：这里的对于目标样本的数据增强和TGCF-DA并不相关，差点就被带偏了，不知道理解到什么地方了。不过仔细看了一下后面的内容，得到如下理解</p>
+<ul>
+<li>这里对target samples增强是为了在self-ensembling中计算consistency loss。对于目标样本的随机数据增强，是为了强迫学生网络针对相同的目标样本得到不同的预测，以更好的训练学生和教师网络。</li>
+<li>根据前文，常规self-ensembling中的几何变换对于像素级别的预测任务并无帮助。因此，本文<strong>在目标样本中注入高斯噪声，并分别喂给学生和教师网络</strong>。此外，对于网络参数还是用了Dropout。</li>
+<li>因此，学生网络在目标样本有扰动的情况下，还必须得产生和教师网络一致的预测，这也变相了提升了模型的性能。</li>
+</ul>
+<h1 id="4-Experiments"><a href="#4-Experiments" class="headerlink" title="4. Experiments"></a>4. Experiments</h1><p>​    在做实验之前，作者略微详细的介绍了用到的数据集如：GTA5，Cityscapes等。对于实验的配置，作者说的很详细，建议详细阅读。比如TGCF-DA的具体构造，生成器和判别器都是挑了比较好的结构，一起一些超参数的设置。此外，还讲了self-ensembling中，对于分割网络的选择，选择哪一层计算损失等。</p>
+<h2 id="4-1-Experimental-results"><a href="#4-1-Experimental-results" class="headerlink" title="4.1 Experimental results"></a>4.1 Experimental results</h2><ul>
+<li><p>作者将自己的方法与CycleGAN，MCD，DCAN等一堆方法进行比较。该实验首先在GTA5或者SYNTHIA数据集上，训练分割网络，并在Cityscapes的验证集上验证。实验得结果如下表所示</p>
+<p><img src="/2019/12/10/self-ensembing/Table1.jpg" alt="Table1"></p>
+<ul>
+<li>表中的<strong>Self-Ensembling</strong>，代表着由源数据和目标数据(未加入增强数据)训练得到的分割网络的性能</li>
+<li>表中的<strong>TGCF-DA</strong>表明由源数据、目标数据、TGCF-DA生成的增强数据，共同训练的分割网络</li>
+<li>表中的<strong>Ours(TGCF-DA + SE)</strong>表明结合了TGCF-DA和Self-Enembling方法，得到的分割网络</li>
+<li>表中的<strong>mIoU*</strong>代表的是，13个常见类别的mIoU，因为数据集中有些类别出现次数不多。但具体是哪13个类并没有讲，可能会在作者提供的附件里</li>
+<li>表中的<strong>Source Only</strong>声明了只在源数据集上训练的分割模型的效果</li>
+<li>表中的<strong>Target Only</strong>声明了在监督设定下训练的分割模型的效果</li>
+</ul>
+</li>
+<li><p>作为刚接触Domain Adaption的小白，对于这个实验一直耿耿于怀。首先是对于表中的Baseline(Source Only)的不理解，其次是对Target Only的不了解。经反复思考后，理解如下</p>
+<ul>
+<li><p><strong>Baseline(Source Only)</strong>既然都说了是Source Only，而且文中又把增强后的数据叫做Augmented Data。对应上面的表格，Baseline应该指的就是GTA5和SYNTHIA中的原始训练集，训练得到的分割模型，那效果肯定差。</p>
+</li>
+<li><p>接下来一系列的方法，CycleGAN，MCD，DCAN等，应该都是使用进行Domain Shift后的数据配合原始的mask标签，来训练分割网络，那为什么效果会差呢？根据文中的描述，原因有二</p>
+<ul>
+<li>首先是，经过Domain Shift图像的内容结构可能被破坏了，导致原始的mask标签不匹配，从而产生语义上的损失。<strong>如，车子经过domain shift之后形状变了，但对应的mask掩码标签却没变，那效果肯定差</strong>。</li>
+<li>其次是，负迁移造成的影响，有些类别过于稀疏，在Domain Shift的时候导致转换有误，<strong>如，前面的例子，将马路的知识迁移到了天空上</strong>。</li>
+</ul>
+</li>
+<li><p>然后就是纯Self-Ensembling方法了，效果有一定提升，但是没本文方法提升的多。但作者在前文就指出原始的Self-Ensembling适用于分类网络，但却不太适用于分割网络。<strong>我理解是：由于Self-Ensembling是通过形变原始数据得到增强数据，来提升分类模型的性能；而在分割网络中，形变原始数据会导致其和mask标签不匹配，破坏了内容结构，所以效果变差</strong>。</p>
+</li>
+<li><p>最后就是文中提到的两个方法</p>
+<ul>
+<li><p>先是只使用了<strong>TGCF-DA</strong>，效果并没有好到哪里去，甚至比CycleGAN，MCD，DCAN等方法都要低几个点。这说明，抛弃Cycle Consistency，理想化的将图像分为content和style，并通过AdaIN方法进行结合等一系列操作，并没有达到作者预期的效果。<strong>我觉得作者可能一开始只提出了这个方法，做了实验之后发现效果居然没有好太多，再考虑将Self-ensembling的方法加入来提升网络的性能</strong>。不过，这个方法还是很有创意，巧妙地将任意风格迁移和GAN结合在了一起，值得我思考。</p>
+</li>
+<li><p>然后就是<strong>TGCF-DA + Self-ensembling</strong>，效果简直超神，顺利毕业。原理就是，通过TGCF-DA预训练模型生成增强数据，然后配合学生、老师网络进行训练，最后得到一个更好的分割模型。如下图</p>
+<p><img src="/2019/12/10/self-ensembing/Figure3.jpg" alt="Figure3"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-Ablation-studies"><a href="#4-2-Ablation-studies" class="headerlink" title="4.2 Ablation studies"></a>4.2 Ablation studies</h2><ul>
+<li><p>首先，做了Self-Ensembling的消融实验，如下图</p>
+<p><img src="/2019/12/10/self-ensembing/Figure4.jpg" alt="Figure4"></p>
+<ul>
+<li>在上一实验的表格中，就发现纯Self-Ensembling效果很差</li>
+<li>这就说明了，主要的功劳并不在Self-Ensembling的应用上，而是TGCF-DA + Self-Ensembling上</li>
+</ul>
+</li>
+<li><p>其次，做了TGCF-DA的消融实验</p>
+<ul>
+<li>在上一实验表格中，发现TGCF-DA能有效提升分割模型的效果。</li>
+<li>其次，通过图示风格模型的mIOU，发现纯Self-Ensembling在第8个epoch就达到了极大值，继续训练效果变差，而TGCF-DA + Self-Ensembling效果持续上升，说明二者结合才是王道。也从侧面说明了TGCF-DA的重要性</li>
+</ul>
+</li>
+<li><p><strong>在消融实验中，作者想表明TGCF-DA + Self-Ensembling结合的重要性，并将主要功劳放在TGCF-DA上。但正如我前文所说，TGCF-DA的效果和其他方法相差不多，那是否将其他方法和Self-Ensembling结合，也会得到更好的效果呢？</strong>不过，这也是我鸡蛋里挑骨头了，本文主要的贡献已经很多了，就比如TGCF-DA + Self-Ensembling结合训分割模型，提升性能，也是本文的卖点。</p>
+</li>
+</ul>
+<h1 id="5-Analysis"><a href="#5-Analysis" class="headerlink" title="5. Analysis"></a>5. Analysis</h1><p>​    在这块内容，作者可视化了几个模块的结果，并进行进一步的分析。</p>
+<h2 id="5-1-Visualizaton"><a href="#5-1-Visualizaton" class="headerlink" title="5.1 Visualizaton"></a>5.1 Visualizaton</h2><ul>
+<li><p>首先是对于Self-Ensembling中间结果的可视化，如下图</p>
+<p><img src="/2019/12/10/self-ensembing/Figure5.jpg" alt="Figure5"></p>
+<ul>
+<li>图中表明，教师网络能够很好的指导学生网络进行训练。</li>
+<li>此外，根据热力图可以发现，consistency loss在训练中会逐渐关注到物体的轮廓，从而微调轮廓提升预测的效果。</li>
+</ul>
+</li>
+<li><p>其次是，可视化自己的增强数据</p>
+<p><img src="/2019/12/10/self-ensembing/Figure6.jpg" alt="Figure6"></p>
+<ul>
+<li>根据作者的描述，大多数方法都扰乱了物体的轮廓</li>
+<li>甚至，有的方法发生了“负迁移”，就是将天空迁移到了马路上，但作者在这里没提“负迁移”，提了一个叫“spills over”的概念，我思索一下就是“负迁移”。</li>
+<li>从而，得出自己的方法计算得快，在视觉程度上效果还好。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-2-Analysis-of-self-ensembling-with-per-class-IoUs"><a href="#5-2-Analysis-of-self-ensembling-with-per-class-IoUs" class="headerlink" title="5.2 Analysis of self-ensembling with per-class IoUs"></a>5.2 Analysis of self-ensembling with per-class IoUs</h2><ul>
+<li><p>为了更好的理解self-ensembling，作者比较了在使用self-ensembling下，不同类别精度的提升情况，如下图</p>
+<p><img src="/2019/12/10/self-ensembing/Figure7.jpg" alt="Figure7"></p>
+</li>
+<li><p>可以看到，每个类别提升的程度不同。作者人为原因是各个类别数据的不平衡。数据越多的类，提升的效果也越明显。在Self-ensembling中，这个效果会越明显。因为学生网络持续学习到教师网络的预测，那么将会不断的在稀少类别上做出错误的预测。这也印证了作者说的：教师网络的预测是学生网络的伪标签。</p>
+</li>
+<li>这一块实验个人感觉精华就是：类别越多，提升性能越大</li>
+</ul>
+<h1 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6. Conclusion"></a>6. Conclusion</h1><ul>
+<li>作者在文章的结尾，还解释了各种超参数的设计和原因，若是对文章感兴趣的朋友可以自行阅读。</li>
+<li>那么，我在看完这篇文章后，总结如下<ul>
+<li>Domain Adaption可以通过迁移真实数据的知识到虚拟数据中，获得增强后的数据，以缓解基于深度学习的语义分割任务中，对于大量标注数据的需求。</li>
+<li>但是，现有的Domain Adaption方法有以下问题<ul>
+<li>生成的增强图像内容信息损失，如结构紊乱，和源数据的标签不匹配了</li>
+<li>生成的增强图像发生了“负迁移”，导致知识迁移的位置不正确，如“天空”迁移到“马路”上</li>
+<li>现有的Domain Shift方法大多基于Cycle-consistency，参数多耗时耗力</li>
+</ul>
+</li>
+<li>故本文提出了基于GAN的数据增强方法TGCF-DA<ul>
+<li>两个Encoder，一个抽取源数据的内容，另一个抽取目标数据的风格</li>
+<li>抽取到的内容和风格通过AdaIN结合在一起构成Generator，生成fake图像</li>
+<li>fake图像，和目标数据集中的图像作为Discriminator的输入，更新Generator</li>
+</ul>
+</li>
+<li>但仅用TGCF-DA生成的增强数据训练分割网络和其他的方法效果差不多，故本文又引入了Self-ensembling来训练分割网络。稍微不同的是，原始的Self-ensembling改变图像的形状，但本文是给图像注入高斯噪音。因为改变几何形状会破坏图像和mask标签的匹配性</li>
+<li>最后，TGCF-DA + Self-ensembling的结合，在实验上取得了令人瞩目的效果</li>
+</ul>
+</li>
+<li>我认为本文的亮点如下<ul>
+<li>TGCF-DA网络的构造，结合了GAN+任意风格迁移，很新颖</li>
+<li>TGCF-DA + Self-ensembling，说白了就是将Domain Shit方法和Self-ensembling方法结合在一起。</li>
+</ul>
+</li>
+<li>我认为本文未解释清楚的就是，没有做实验证明， 其他的Domain Shift方法和Self-ensembling结合在一起，是否也会得到很好的效果</li>
+</ul>
+<p>最后，感谢本文作者的贡献，respect!</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    GodWriter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://godwriter.github.io/2019/12/10/self-ensembing/" title="Self-Ensembing with GAN-based Data Augmentation for Domain Adaption in Sematic Segmentation">https://godwriter.github.io/2019/12/10/self-ensembing/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/05/knn/" rel="next" title="第二章 K近邻法">
+                <i class="fa fa-chevron-left"></i> 第二章 K近邻法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/11/extensive-reading1/" rel="prev" title="论文泛读1：基于Disentangle的Image-to-Image Translation">
+                论文泛读1：基于Disentangle的Image-to-Image Translation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="GodWriter">
+            
+              <p class="site-author-name" itemprop="name">GodWriter</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Abstract"><span class="nav-text">1. Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Introduction"><span class="nav-text">2. Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Proposed-Method"><span class="nav-text">3. Proposed Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Target-guided-generator"><span class="nav-text">3.1 Target-guided generator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Semantic-constraint"><span class="nav-text">3.2 Semantic constraint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Target-guided-and-cycle-free-data-augmentation"><span class="nav-text">3.3 Target-guided and cycle-free data augmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Self-ensembling"><span class="nav-text">3.4 Self-ensembling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Data-augmentation-for-target-samples"><span class="nav-text">3.5 Data augmentation for target samples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Experiments"><span class="nav-text">4. Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Experimental-results"><span class="nav-text">4.1 Experimental results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Ablation-studies"><span class="nav-text">4.2 Ablation studies</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Analysis"><span class="nav-text">5. Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Visualizaton"><span class="nav-text">5.1 Visualizaton</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-Analysis-of-self-ensembling-with-per-class-IoUs"><span class="nav-text">5.2 Analysis of self-ensembling with per-class IoUs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Conclusion"><span class="nav-text">6. Conclusion</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GodWriter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
