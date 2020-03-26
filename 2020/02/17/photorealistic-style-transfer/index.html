@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://godwriter.github.io/2020/02/17/photorealistic-style-transfer/4-exp-2.jpg">
 <meta property="og:image" content="https://godwriter.github.io/2020/02/17/photorealistic-style-transfer/4-exp-3.jpg">
 <meta property="og:image" content="https://godwriter.github.io/2020/02/17/photorealistic-style-transfer/4-exp-4.jpg">
-<meta property="og:updated_time" content="2020-03-25T09:09:47.478Z">
+<meta property="og:updated_time" content="2020-03-26T07:44:51.561Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文精读：PhotoRealistic Style Transfer系列">
 <meta name="twitter:description" content="1. Prerequisite Knowledge 此部分为预备知识，主要涉及内容如下：  Upsampling, Uppooling, Transpose Convolution（上采样，上池化，转置卷积）  Whitening and Coloring Transformations（白化与上色）  Wavelet Transforms（小波变换）  若是熟悉这几块内容的童鞋可以直接跳过~ 1">
@@ -475,7 +475,32 @@
 <script type="math/tex; mode=display">X = \Phi Y = \Phi ~ \Lambda^{\frac{1}{2}} ~ S</script></li>
 </ol>
 <p>至此，上色操作就结束了~</p>
-<h2 id="1-3-Wavelet-Transforms"><a href="#1-3-Wavelet-Transforms" class="headerlink" title="1.3 Wavelet Transforms"></a>1.3 Wavelet Transforms</h2><p>这一段内容，主要是对参考文献<strong>[1]</strong>中部分相关资料的整理。由于非通信专业，对信号学的知识理解不多，感谢原作者分享的知识~。</p>
+<h2 id="1-3-Wavelet-Transforms"><a href="#1-3-Wavelet-Transforms" class="headerlink" title="1.3 Wavelet Transforms"></a>1.3 Wavelet Transforms</h2><p>这一段内容，主要是对参考文献<strong>[1]</strong>中部分相关资料的整理。由于非通信专业，对信号学的知识理解不多，感谢原作者分享的知识~。假设现在有一个信号<script type="math/tex">X= [90 ~~ 70 ~~ 100 ~~ 70]</script>，我想要对其进行压缩该怎么办呢？</p>
+<ul>
+<li><p>记<script type="math/tex">x_0=90 ~~ x_1=70 ~~ x_2=100 ~~ x_3=70</script>，现在我们通过如下计算重新获取它们的值</p>
+<script type="math/tex; mode=display">\begin{cases} x_0^{'} = \frac{x_0 + x_1}{2} = 80 \\ x_1^{'} = \frac{x_0 - x_1}{2} = 10 \end{cases}</script><p>其中，80是平均数，而10则是它们的波动范围。同理，</p>
+<script type="math/tex; mode=display">\begin{cases} x_2^{'} = \frac{x_2 + x_3}{2} = 85 \\ x_3^{'} = \frac{x_2 - x_3}{2} = 15 \end{cases}</script><p>其中，85是平均数，而15是它们的波动范围</p>
+</li>
+<li><p>通过上述计算得到的<script type="math/tex">\{80 ~~ 10 ~~ 85 ~~ 15\}</script>四个值</p>
+<ul>
+<li>其中80和85是局部平均值，反映该信号大的总体状态，是相对平缓的值；可以认为它们是<strong>信号的低频部分，记作<script type="math/tex">L</script></strong>。</li>
+<li>而10和15是小范围波动的值，局部变化较快，可以认为<strong>它们是信号的高频部分，记作<script type="math/tex">H</script></strong>。</li>
+</ul>
+</li>
+<li><p>现在，我们将<script type="math/tex">\{80 ~~ 10 ~~ 85 ~~ 15\}</script>重新排列，得到<script type="math/tex">[80 ~~ 85 ~~ 10 ~~ 15]</script>，记作<script type="math/tex">[L ~~ L ~~ H ~~ H]</script>。然后，我们重复第一步的操作，得到</p>
+<script type="math/tex; mode=display">\begin{cases} x_0^{''} = \frac{x_0^{'} + x_1^{'}}{2} = 82.5 \\ x_1^{''} = \frac{x_0^{'} - x_1^{'}}{2} = -2.5 \\ x_2^{''} = \frac{x_2^{'} + x_3^{'}}{2} = 12.5 \\ x_3^{''} = \frac{x_2^{'} - x_3^{'}}{2} = -2.5 \end{cases}</script></li>
+<li><p>通过上述计算得到的<script type="math/tex">\{82.5 ~~ -2.5 ~~ 12.5 ~~ -2.5\}</script>四个值，将它们重新排列，记作<script type="math/tex">[LL ~~ LH ~~ HL ~~ HH]</script>。</p>
+</li>
+</ul>
+<p>现在，我们使用线性代数的知识，利用矩阵运算完成上述操作</p>
+<ul>
+<li><p>对于<script type="math/tex">x_0=90 ~~ x_1=70</script>，若要得到<script type="math/tex">x_0^{'}=80 ~~ x_1^{'}=10</script>，那么需要做如下初等变换</p>
+<script type="math/tex; mode=display">[90 ~~ 70]\left[ \begin{matrix} \frac{1}{2} & \frac{1}{2} \\ \frac{1}{2} & -\frac{1}{2} \end{matrix} \right] = [80 ~~ 10]</script><p>这个右乘的矩阵<script type="math/tex">\frac{1}{2}\left[ \begin{matrix} 1 & 1 \\ 1 & -1 \end{matrix} \right]</script>是不是很熟悉，有点接近于<script type="math/tex">Haar ~~ Wavelet</script>了。</p>
+</li>
+<li><p>那么</p>
+<script type="math/tex; mode=display">[L ~~ L ~~ H ~~ H] = [90 ~~ 70 ~~ 100 ~~ 70]\left[ \begin{matrix} \frac{1}{2} & \frac{1}{2} \\ \frac{1}{2} & -\frac{1}{2} \end{matrix} \right] = [80 ~~ 85 ~~ 10 ~~ 15]</script></li>
+</ul>
+<p>以此类推，大家可以通过熟悉的线性代数得到最后的<script type="math/tex">[LL ~~ LH ~~ HL ~~ HH]</script>。注意，<strong>为了得到<script type="math/tex">[LL ~~ LH ~~ HL ~~ HH]</script>，每次右乘的矩阵都是正交方阵，也就是说其可逆且<script type="math/tex">AA^T=I</script>，这个性质在后面的论文中会用到</strong>。</p>
 <h1 id="2-Universal-Style-Transfer-via-Feature-Transforms-WCT"><a href="#2-Universal-Style-Transfer-via-Feature-Transforms-WCT" class="headerlink" title="2. Universal Style Transfer via Feature Transforms(WCT)"></a>2. Universal Style Transfer via Feature Transforms(<script type="math/tex">WCT</script>)</h1><p>pass</p>
 <h1 id="3-A-Closed-form-Solution-to-Photorealistic-Image-Stylization-PhotoWCT"><a href="#3-A-Closed-form-Solution-to-Photorealistic-Image-Stylization-PhotoWCT" class="headerlink" title="3. A Closed-form Solution to Photorealistic Image Stylization(PhotoWCT)"></a>3. A Closed-form Solution to Photorealistic Image Stylization(<script type="math/tex">PhotoWCT</script>)</h1><p>pass</p>
 <h1 id="4-Photorealistic-Style-Transfer-viaWavelet-Transforms-WCT-2"><a href="#4-Photorealistic-Style-Transfer-viaWavelet-Transforms-WCT-2" class="headerlink" title="4. Photorealistic Style Transfer viaWavelet Transforms(WCT^2)"></a>4. Photorealistic Style Transfer viaWavelet Transforms(<script type="math/tex">WCT^2</script>)</h1><blockquote>
@@ -508,7 +533,7 @@
 <p>答案是Yes。在<script type="math/tex">WCT^2</script>中主要使用的是<script type="math/tex">Haar ~ wavelets</script>来做池化和反池化。</p>
 <ul>
 <li><p>$Haar ~ wavelets$一共有四个滤波器，分别为$\{LL^T ~ LH^T HL^T HH^T \}$，其中</p>
-<script type="math/tex; mode=display">L^T = \frac{1}{\sqrt[]{2}}[1 ~~~ 1], ~~~ H^T = \frac{1}{\sqrt[]{2}}[1 ~~~ 1]</script><p>​    其中低通滤波器专门用来捕获图像中光滑的表面和纹理，这其实也就是图像中的大部分信息了。高通滤波器用来提取垂直、水平和对角的边缘类信息，这就对对应了图像中的细节信息。</p>
+<script type="math/tex; mode=display">L^T = \frac{1}{\sqrt[]{2}}[1 ~~~ 1], ~~~ H^T = \frac{1}{\sqrt[]{2}}[-1 ~~~ 1]</script><p>​    其中低通滤波器专门用来捕获图像中光滑的表面和纹理，这其实也就是图像中的大部分信息了。高通滤波器用来提取垂直、水平和对角的边缘类信息，这就对对应了图像中的细节信息。</p>
 </li>
 <li><p>这里，我们可以先计算出所有的滤波器，为后文滤波器的运用做铺垫。计算的结果如下（该数值经过作者源码的验证，有兴趣可以自己去查看一下源码，写的很干净）：</p>
 <script type="math/tex; mode=display">LL^T=\frac{1}{2}\left[ \begin{matrix} 1 & 1 \\ 1 & 1 \end{matrix} \right] ~~~~~~~~~~~~~ LH^T=\frac{1}{2}\left[ \begin{matrix} -1 & 1 \\ -1 & 1 \end{matrix} \right]</script><script type="math/tex; mode=display">HL^T=\frac{1}{2}\left[ \begin{matrix} -1 & -1 \\ 1 & 1 \end{matrix} \right] ~~~~~~~~ HH^T=\frac{1}{2}\left[ \begin{matrix} 1 & -1 \\ -1 & 1 \end{matrix} \right]</script></li>
