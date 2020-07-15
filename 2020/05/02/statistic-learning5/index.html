@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Machine Learning,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Cross-Validation on Classification Problems Cross-Validation用于分类任务概念  在系列前文中，描述的都是$Cross-Validation$在回归任务中的应用，并使用$MSE$量化Test Error，但$Cross-Validation$同样可以应用于分类任务中。  在分类任务中，$Cross-Validation$的用法和前文一">
+<meta name="keywords" content="Machine Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Statistic Learning 5">
+<meta property="og:url" content="https://godwriter.github.io/2020/05/02/statistic-learning5/index.html">
+<meta property="og:site_name" content="GodWriter">
+<meta property="og:description" content="1. Cross-Validation on Classification Problems Cross-Validation用于分类任务概念  在系列前文中，描述的都是$Cross-Validation$在回归任务中的应用，并使用$MSE$量化Test Error，但$Cross-Validation$同样可以应用于分类任务中。  在分类任务中，$Cross-Validation$的用法和前文一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-06T11:34:56.995Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Statistic Learning 5">
+<meta name="twitter:description" content="1. Cross-Validation on Classification Problems Cross-Validation用于分类任务概念  在系列前文中，描述的都是$Cross-Validation$在回归任务中的应用，并使用$MSE$量化Test Error，但$Cross-Validation$同样可以应用于分类任务中。  在分类任务中，$Cross-Validation$的用法和前文一">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://godwriter.github.io/2020/05/02/statistic-learning5/">
+
+
+
+
+
+  <title>Statistic Learning 5 | GodWriter</title>
+  
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/GodWriter" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GodWriter</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://godwriter.github.io/2020/05/02/statistic-learning5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GodWriter">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GodWriter">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Statistic Learning 5</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-02T22:02:00+08:00">
+                2020-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Statistic-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Statistic Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-Cross-Validation-on-Classification-Problems"><a href="#1-Cross-Validation-on-Classification-Problems" class="headerlink" title="1. Cross-Validation on Classification Problems"></a>1. Cross-Validation on Classification Problems</h1><blockquote>
+<p>Cross-Validation用于分类任务概念</p>
+</blockquote>
+<p>在系列前文中，描述的都是$Cross-Validation$在回归任务中的应用，并使用$MSE$量化Test Error，但$Cross-Validation$同样可以应用于分类任务中。</p>
+<ul>
+<li><p>在分类任务中，$Cross-Validation$的用法和前文一致，不一样的地方在于没有使用$MSE$来量化误差，而是使用错误分类的个数。</p>
+</li>
+<li><p>举个例子，在分类任务中，$LOOCV$的Error Rate计算如下：</p>
+<script type="math/tex; mode=display">CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}Err_i</script><p>这里的$Err_i = I(y_i \neq \hat{y_i})$，$I$是指示函数，但括号内条件满足时值为$1$，否则值为$0$。</p>
+</li>
+</ul>
+<blockquote>
+<p>Cross-Validation用于分类任务实例</p>
+</blockquote>
+<ul>
+<li><p>首先生成模拟数据，并选定Logistic Regression作为分类模型。由于数据为生成数据，可以得到此时的True Test Error=0.201，而此时的Bayes Error Rate=0.133，这说明了当前的Logistic Regression的灵活度难以完成对该生成数据的Bayes Decision Boundary建模。</p>
+</li>
+<li><p>但通过采用$predictors$的多项式形式，可以将Logistic Regression扩展为非线性决策边界。举个例子，Logistic Regression的二次型如下：</p>
+<script type="math/tex; mode=display">log(\frac{p}{1-p}) = \beta_0 + \beta_1x_1 + \beta_2x_1^2 + \beta_3x_2 + \beta_4x_2^2</script><ul>
+<li>若采用上述形式，Test Error Rate将会从0.201降低为0.197。</li>
+<li>类似上面，拟合一个包含三次项形式$predictor$的Logistic Regression，Test Error Rate降低为0.160。</li>
+<li>而拟合一个包含四次项形式的，Test Error Rate稍微上升，为0.162。</li>
+</ul>
+</li>
+<li><p>但在实际应用中，Bayes Decision Boundary和Test Error Rate是未知的，那么我们如何决定使用上述4中Logistic Regression的哪一种形式呢？<strong>答案是：Cross-Validation。</strong></p>
+<ul>
+<li>可以使用$10-fold~CV$的方式分别训练不同自由度的Logistic Regression方法（多项式的次数从1到10）</li>
+<li>从图中可以发现，Training Rate随着模型自由度的提升而降低（虽然单调下降，但是随着模型自由度的增加，Training Error Rate总体上呈下降的趋势）。</li>
+<li>作为对比，Test Error展现出一个$U$型，即先下降再上升。说明自由度太高，模型可能过拟合了，所以在$U$型底部的模型应该是一个维持了$bais-variance~trade-off$的模型。</li>
+<li>虽然一定程度上，$10-fold~CV$ Error Rate低估了错误率，但四阶多项式时其达到了最小值，这与三阶多项式测试曲线的最小值相当接近。</li>
+</ul>
+</li>
+<li><p>同样，可以使用$KNN$方法用于对比</p>
+<ul>
+<li>可以发现，随着$K$值的减小，Training Rate随着模型灵活度的提高而再次下降（对于$KNN$，$K$越大，模型的自由度越低）。</li>
+<li>同样，Cross-Validation Error Curve低估了Test Error Rate，但对于寻找最优$K$，它还是很有帮助的。</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-BootStrap（自举法）"><a href="#2-BootStrap（自举法）" class="headerlink" title="2. BootStrap（自举法）"></a>2. BootStrap（自举法）</h1><p>$BootStrap$是一个广泛适用、功能强大的统计工具，可以用来量化和估计统计学习方法的不确定性。</p>
+<ul>
+<li>一个简单的例子是，$BootStrap$可以用来估计线性回归拟合系数的标准误差。</li>
+<li>$BootStrap$的强大之处在于它可以很容易的应用于各种各样的统计学习方法。</li>
+</ul>
+<p>在下面的例子中，我们将讨论如何使用$BootStrap$评估线性模型参数的变化性。</p>
+<blockquote>
+<p>BootStrap实例</p>
+</blockquote>
+<ul>
+<li><p>假设我们想将一笔固定的金额投资于两种分别产生$X$和$Y$回报的金额资产，其中$X$和$Y$时随机变量。</p>
+<ul>
+<li><p>通过参数$\alpha$来分配投资的比例，将$\alpha$比例的钱投资$X$，$(1-\alpha)$比例的钱投资$Y$。</p>
+</li>
+<li><p>由于$X,Y$的回报会不断变化，我们想要求出令投资风险最小的$\alpha$。换句话说，我们想要最小化：</p>
+<script type="math/tex; mode=display">Var(\alpha X + (1-\alpha)Y)</script><p>即总回报的方差很小，偏离均值的幅度很少，那么风险就比较小。</p>
+</li>
+<li><p>为了最小化风险，可以通过下式来计算$\alpha$：</p>
+<script type="math/tex; mode=display">\alpha = \frac{\sigma_Y^2 - \sigma_{XY}}{\sigma_X^2 + \sigma_Y^2 - 2\sigma_{XY}}</script><p>其中<script type="math/tex">\sigma_X^2 = Var(X)</script>，<script type="math/tex">\sigma_Y^2 = Var(Y)</script>，<script type="math/tex">\sigma_{XY} = Cov(X, Y)</script></p>
+</li>
+</ul>
+</li>
+<li><p>但在实际应用中，<script type="math/tex">\sigma_X^2,\sigma_Y^2, \sigma_{XY}</script>是未知的，但我们可以通过一个已有的测量$X,Y$的数据集来估计<script type="math/tex">\hat{\sigma}_X^2,\hat{\sigma}_Y^2, \hat{\sigma}_{XY}</script>，从而带入前面的式子中求得$\alpha$。</p>
+<ul>
+<li><p>为此，我们从真是分布中生成100批数据，并估计分布的$\hat{\alpha}$值。</p>
+</li>
+<li><p>重复上述操作1000次，那么就可以得到<script type="math/tex">\hat{\alpha}_1, \hat{\alpha}_2, \hat{\alpha}_3,...,\hat{\alpha}_{1000}</script>。</p>
+</li>
+<li><p>我们设置生成分布数据的<script type="math/tex">\sigma_X^2=1,\sigma_Y^2 = 1.25, \sigma_{XY} = 0.5</script>，故我们可以算出真实的$\alpha=0.6$。而此时1000个$\hat{\alpha}$的估计可以得到：</p>
+<script type="math/tex; mode=display">\bar{\alpha} = \frac{1}{1000}\sum_{r=1}^{1000}\hat{\alpha_r} = 0.5996</script></li>
+<li><p>这时${\bar{\alpha}}$和0.6非常接近了，这个值的标准差为：</p>
+<script type="math/tex; mode=display">\sqrt{\frac{1}{1000-1}\sum_{r=1}^{1000}(\hat{\alpha_r - \bar{\alpha}})^2} = 0.083</script></li>
+</ul>
+</li>
+<li><p>但在实际中，上述估计$SE(\hat{\alpha})$的方式难以应用，因为真实数据的分布是未知的，故我们无法从分布中多次采样新的数据。但$BootStrap$允许计算机来模拟这个采样过程，这就确保无需使用额外的样本来估计$\hat{\alpha}$了。$BootStrap$不再从分布中生成随机数据，而是在原始数据集中重复采样样本。</p>
+<ul>
+<li><p>假设有一个简单的数据集$Z$，从数据集$Z$中随机放回采样$n$个样本得到$bootstrap$数据集<script type="math/tex">z^{*i}</script>。由于是放回采样，这意味着<script type="math/tex">Z^{*i}</script>中的样本是可以重复的。</p>
+</li>
+<li><p>重复上述步骤$B$次，可以获得<script type="math/tex">Z^{*1},Z^{*2},Z^{*3},...,Z^{*B}</script>，同样我们可以计算出相对应的$\alpha$估计：<script type="math/tex">\hat{\alpha}^{*1},\hat{\alpha}^{*2},\hat{\alpha}^{*3},...,\hat{\alpha}^{*B}</script>。</p>
+</li>
+<li><p>于是，可以计算这些$bootstrap$的标准误差如下式：</p>
+<script type="math/tex; mode=display">SE_B(\hat{\alpha}) = \sqrt{\frac{1}{B-1}\sum_{r=1}^B(\hat{\alpha}^{*r} - \frac{1}{B}\sum_{r^{'}=1}^B\hat{\alpha}^{*r})}</script><p>这就是对原始数据的$\hat{\alpha}$的估计</p>
+</li>
+</ul>
+</li>
+<li><p>最后，简单总结一下$BootStrap$：从原始数据集中随机放回采样$n$个样本$B$次，构建$B$个$bootstrap$数据集。通过对这些数据集的计算，获取统计量的分布。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    GodWriter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://godwriter.github.io/2020/05/02/statistic-learning5/" title="Statistic Learning 5">https://godwriter.github.io/2020/05/02/statistic-learning5/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/26/statistic-learning4/" rel="next" title="Statistic Learning 4">
+                <i class="fa fa-chevron-left"></i> Statistic Learning 4
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/06/reinforcement-learning1/" rel="prev" title="Reinforcement Learning 1">
+                Reinforcement Learning 1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="GodWriter">
+            
+              <p class="site-author-name" itemprop="name">GodWriter</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Cross-Validation-on-Classification-Problems"><span class="nav-text">1. Cross-Validation on Classification Problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-BootStrap（自举法）"><span class="nav-text">2. BootStrap（自举法）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GodWriter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
